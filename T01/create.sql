@@ -1,3 +1,7 @@
+CREATE DATABASE IF NOT EXISTS sbd;
+
+USE sbd;
+
 CREATE TABLE `client` (
   `id` INTEGER PRIMARY KEY AUTO_INCREMENT,
   `first_name` VARCHAR(255) NOT NULL,
@@ -65,7 +69,6 @@ CREATE TABLE `order_state` (
 
 CREATE TABLE `product_menu` (
   `id` INTEGER PRIMARY KEY AUTO_INCREMENT,
-  `surplus` INTEGER NOT NULL,
   `weekend` BOOLEAN NOT NULL,
   `open_time` TIME NOT NULL,
   `close_time` TIME NOT NULL
@@ -93,6 +96,7 @@ ALTER TABLE `product` ADD CONSTRAINT `fk_product__product_type_id` FOREIGN KEY (
 CREATE TABLE `product_ingredient` (
   `product_id` INTEGER NOT NULL,
   `ingredient_id` INTEGER NOT NULL,
+  `quantity` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`product_id`, `ingredient_id`)
 );
 
@@ -105,6 +109,7 @@ ALTER TABLE `product_ingredient` ADD CONSTRAINT `fk_product_ingredient__product_
 CREATE TABLE `product_menu_type` (
   `product_menu_id` INTEGER NOT NULL,
   `product_type_id` INTEGER NOT NULL,
+  `surplus` DECIMAL(12, 2) NOT NULL,
   PRIMARY KEY (`product_menu_id`, `product_type_id`)
 );
 
@@ -198,12 +203,13 @@ ALTER TABLE `restaurant_employee` ADD CONSTRAINT `fk_restaurant_employee__employ
 ALTER TABLE `restaurant_employee` ADD CONSTRAINT `fk_restaurant_employee__restaurant_id` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurant` (`id`);
 
 CREATE TABLE `stock_ingredient` (
-  `restaurant_id` INTEGER,
-  `ingredient_id` INTEGER PRIMARY KEY,
-  `quantity` INTEGER NOT NULL
+  `restaurant_id` INTEGER NOT NULL,
+  `ingredient_id` INTEGER NOT NULL,
+  `quantity` INTEGER NOT NULL,
+  PRIMARY KEY (`restaurant_id`, `ingredient_id`)
 );
 
-CREATE INDEX `idx_stock_ingredient__restaurant_id` ON `stock_ingredient` (`restaurant_id`);
+CREATE INDEX `idx_stock_ingredient__ingredient_id` ON `stock_ingredient` (`ingredient_id`);
 
 ALTER TABLE `stock_ingredient` ADD CONSTRAINT `fk_stock_ingredient__ingredient_id` FOREIGN KEY (`ingredient_id`) REFERENCES `ingredient` (`id`);
 

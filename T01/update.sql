@@ -1,3 +1,5 @@
+USE sbd;
+
 INSERT INTO `client`
   (`first_name`,`last_name`,`email`,`password`,`mobile_number`,`tax_number`,`birth_date`)
 VALUES
@@ -124,7 +126,6 @@ VALUES
   ("Allistair Velasquez","porttitor.vulputate@commodohendreritDonec.co.uk","(598) 982-8138","1671010427199","1985-10-11",1),
   ("Jillian Mccarthy","mauris@tincidunt.co.uk","(136) 664-4276","1628042655199","1989-07-20",2);
 
-
   INSERT INTO `client_activity`
   (`client_id`,`client_state_id`,`employee_id`,`date`,`time`)
   VALUES
@@ -149,7 +150,6 @@ VALUES
   (14,1,25,"2016-04-14","22:10:34"),
   (60,1,25,"2016-10-06","22:08:19");
 
-
 INSERT INTO `ingredient`
   (`name`)
 VALUES
@@ -164,7 +164,7 @@ VALUES
   ("Accepted"),("Refused"),("In preperation"),("Ready"),("Delivered"),("Paid");
 
 INSERT INTO `product_menu`
-  (`surplus`,`weekend`,`open_time`,`close_time`)
+  (`weekend`,`open_time`,`close_time`)
 VALUES
   (false,"12:00:00","15:00:00"),
   (true,"12:00:00","15:00:00"),
@@ -201,12 +201,12 @@ VALUES
 INSERT INTO `product_ingredient`
   (`product_id`,`ingredient_id`)
 VALUES
-  (7,1),(7,2),(7,3),(7,4),(8,1),(8,2),(8,10),(8,20),(8,20),
+  (7,1),(7,2),(7,3),(7,4),(8,1),(8,2),(8,10),(8,20),(9,20),
   (9,3),(9,7),(9,15),(10,15),(10,12),(10,11),(10,10),(11,10),
   (11,8),(11,5),(11,18),(11,14),(12,15);
 
 INSERT INTO `product_menu_type`
-  (`product_menu_id`,`product_menu_id`,`surplus`)
+  (`product_menu_id`,`product_type_id`,`surplus`)
 VALUES
   (1,1,0.10),(2,1,0.10),(3,1,0.15),(4,1,0.20),(1,2,0.10),
   (2,2,0.10),(3,2,0.15),(4,2,0.15),(1,3,0.10),(2,3,0.10),
@@ -217,9 +217,9 @@ VALUES
 INSERT INTO `product_recipe`
   (`product_id`,`name`,`file_path`)
 VALUES
-  (7,`Don Carlos`,`dom_carlos.xml`),
-  (8,`Azenhaga`,`azenhaga.xml`),
-  (7,`transmontana`,`transmontana.xml`);
+  (7,"Don Carlos","dom_carlos.xml"),
+  (8,"Azenhaga","azenhaga.xml"),
+  (7,"transmontana","transmontana.xml");
 
 INSERT INTO `restaurant`
   (`name`,`email`,`address`,`postcode`,`city`,`country`,`coordinates`,`denomination`,`logo`)
@@ -238,11 +238,11 @@ VALUES
 INSERT INTO `client_order_product`
   (`order_id`,`product_id`,`product_quantity`)
 VALUES
-  (1,11,9),(1,1,6),(2,11,6),(2,15,1),(3,2,7),(3,2,10),(4,2,8),(4,3,1),
+  (1,11,9),(1,1,6),(2,11,6),(2,15,1),(3,2,7),(3,3,10),(4,2,8),(4,3,1),
   (5,6,8),(5,10,8),(6,4,7),(6,9,4),(7,15,6),(7,2,5),(7,11,2),(8,10,3),
   (9,1,4),(9,5,2),(9,11,7),(10,13,3),(10,3,4),(11,2,3),(11,10,3),(11,1,1),
   (12,13,3),(12,9,4),(13,6,3),(14,12,5),(14,17,5),(15,2,8),(16,9,5),
-  (16,9,8),(17,9,8),(17,8,4),(17,6,9),(17,1,9),(18,7,7),(18,14,3),
+  (16,10,8),(17,9,8),(17,8,4),(17,6,9),(17,1,9),(18,7,7),(18,14,3),
   (19,2,5),(19,8,4),(19,14,2),(20,8,5),(20,2,7),(20,17,9),(20,9,1),
   (21,16,5),(22,7,2),(23,15,10),(24,16,10),(25,2,6),(26,10,3),(27,17,5),
   (28,4,5),(29,1,6),(30,16,9);
@@ -255,19 +255,19 @@ VALUES
   (1,3,1,"2016-12-03","13:20:00",null),
   (1,4,1,"2016-12-03","13:30:00",null),
   (1,5,1,"2016-12-03","13:40:00",null),
-  (1,5,1,"2016-12-03","13:50:00",null),
+  (1,6,1,"2016-12-03","13:50:00",null),
   (2,1,1,"2016-12-03","13:00:00",null),
   (2,2,1,"2016-12-03","13:10:00",null),
   (2,3,1,"2016-12-03","13:20:00",null),
   (2,4,1,"2016-12-03","13:30:00",null),
   (2,5,1,"2016-12-03","13:40:00",null),
-  (2,5,1,"2016-12-03","13:50:00",null),
+  (2,6,1,"2016-12-03","13:50:00",null),
   (3,1,1,"2016-12-03","13:00:00",null),
   (3,2,1,"2016-12-03","13:10:00",null),
   (3,3,1,"2016-12-03","13:20:00",null),
   (3,4,1,"2016-12-03","13:30:00",null),
   (3,5,1,"2016-12-03","13:40:00",null),
-  (3,5,1,"2016-12-03","13:50:00",null);
+  (3,6,1,"2016-12-03","13:50:00",null);
 
 INSERT INTO `restaurant_employee`
   (`restaurant_id`,`employee_id`)
@@ -289,15 +289,15 @@ VALUES
 INSERT INTO `stock_product`
   (`restaurant_id`,`product_id`,`quantity`)
 VALUES
-  (1,1,100),(1,9,100),(1,1,100),(1,2,100),(113,100),(1,4,100),
+  (1,1,100),(1,9,100),(1,2,100),(1,3,100),(1,4,100),
   (1,5,100),(1,6,100),(1,7,100),(1,8,100),
-  (2,1,0),(2,9,0),(2,1,0),(2,2,0),(2,3,0),(2,4,0),
+  (2,1,0),(2,9,0),(2,2,0),(2,3,0),(2,4,0),
   (2,5,0),(2,6,0),(2,7,0),(2,8,0),
-  (3,1,10),(3,9,10),(3,1,10),(3,2,10),(3,3,10),(3,4,10),
+  (3,1,10),(3,9,10),(3,2,10),(3,3,10),(3,4,10),
   (3,5,10),(3,6,10),(3,7,10),(3,8,10);
 
 INSERT INTO `supplier`
-  (`name`,`tax_number`,`address`)
+  (`name`,`tax_number`,`address`,`description`)
 VALUES
   ("Zoé D. Leclercq","1652021653999","P.O. Box 198, 4594 Ut St.",null),
   ("Agathe Fabre","1629100659699","Ap #766-7613 Mollis. Rd.",null),
@@ -321,7 +321,7 @@ VALUES
   ("Evan Collet","1697051577099","P.O. Box 620, 4785 Ut, St.",null);
 
 INSERT INTO `supplier_ingredient`
-  (`supplier_id`,`product_id`,`favorite`)
+  (`supplier_id`,`ingredient_id`,`favorite`)
 VALUES
   (1,3,false),(1,4,false),(1,5,true),(1,10,false),(2,15,false),(2,16,false),
   (2,17,false),(3,12,false),(3,5,false),(3,2,false),(4,16,false),(4,20,true),
@@ -338,7 +338,7 @@ INSERT INTO `supplier_product`
   (`supplier_id`, `product_id`,`favorite`)
 VALUES
   (1,3,false),(1,4,false),(1,5,true),(1,9,false),(2,9,false),(3,2,false),
-  (3,5,false),(3,2,false),(4,8,false),(5,4,false),(5,1,false),(5,2,false),
+  (3,5,false),(3,3,false),(4,8,false),(5,4,false),(5,1,false),(5,2,false),
   (6,3,false),(6,2,false),(6,1,false),(7,5,false),(7,6,true), (8,1,false),
   (8,4,false),(8,6,false),(8,8,false),(9,9,true),(9,3,false),(12,7,false),
   (13,3,false),(13,7,true),(17,1,false),(17,2,true),(17,6,false),(17,8,false),

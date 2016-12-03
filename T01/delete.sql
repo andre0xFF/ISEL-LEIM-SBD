@@ -1,8 +1,10 @@
+USE sbd;
+
 DROP TABLE `supplier_product`;
 DROP TABLE `supplier_ingredient`;
 DROP TABLE `supplier`;
-DROP TABLE `stock_product`
-DROP TABLE `stock_ingredient`
+DROP TABLE `stock_product`;
+DROP TABLE `stock_ingredient`;
 DROP TABLE `restaurant_employee`;
 DROP TABLE `order_processing`;
 DROP TABLE `client_order_product`;
@@ -21,3 +23,5 @@ DROP TABLE `employee`;
 DROP TABLE `employee_type`;
 DROP TABLE `client_state`;
 DROP TABLE `client`;
+
+DROP DATABASE sbd;

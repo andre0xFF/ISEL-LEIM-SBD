@@ -82,74 +82,6 @@ VALUES
   ("Waitress",null),
   ("Owner",null);
 
-INSERT INTO `employee`
-  (`full_name`,`email`,`mobile_number`,`tax_number`,`birth_date`,`employee_type_id`)
-VALUES
-  ("Dakota Aguilar","et.risus.Quisque@variusultrices.ca","(355) 953-8246","1654040971299","1987-12-24",4),
-  ("Amena Y. Cash","semper.auctor.Mauris@tellus.co.uk","(446) 108-7471","1630072285299","1974-05-22",1),
-  ("Devin J. Crawford","erat.vitae.risus@Crasconvallisconvallis.co.uk","(751) 344-3466","1652081415899","1989-04-20",3),
-  ("Uriel D. Dyer","molestie@adipiscingelitCurabitur.org","(420) 501-2035","1676112816199","1991-02-20",3),
-  ("Dillon Turner","aliquet.molestie@ligulaAenean.edu","(652) 511-6803","1633100176899","1977-08-14",1),
-  ("Sasha Z. Huff","nec.imperdiet.nec@musDonecdignissim.edu","(951) 648-5609","1646082178699","1989-07-08",4),
-  ("Ray I. Pena","facilisis.magna.tellus@velest.co.uk","(695) 555-3857","1663040985699","1989-01-08",2),
-  ("Hiroko C. Hanson","egestas.Aliquam@taciti.net","(353) 846-7477","1668072360899","1979-01-24",3),
-  ("Buckminster X. Phelps","vitae@Quisqueliberolacus.co.uk","(619) 114-4403","1629021285399","1988-06-25",3),
-  ("Freya N. Todd","ante@acmattis.org","(584) 781-5239","1606121542799","1983-11-25",1),
-  ("Eleanor Williamson","nibh.Donec.est@leoin.ca","(405) 951-1001","1642123036099","1985-10-29",4),
-  ("Sasha Holloway","sem.ut.dolor@lectus.net","(520) 847-6634","1666013047399","1974-02-27",1),
-  ("Barclay H. Schwartz","accumsan.sed@inaliquet.edu","(517) 671-1041","1622062210799","1992-06-24",2),
-  ("Karleigh Grimes","imperdiet.nec.leo@Morbisitamet.org","(114) 198-3475","1666071984599","1993-09-30",1),
-  ("Vernon Z. Rodriquez","non.luctus.sit@nisl.net","(497) 600-7081","1622053063899","1988-04-26",5),
-  ("Ifeoma Merritt","a.felis@Integervitae.edu","(565) 906-5908","1672011860899","1977-12-25",1),
-  ("Hamish Mayer","faucibus@nisiMauris.ca","(594) 291-8506","1616050338999","1990-03-23",4),
-  ("Karen Estes","adipiscing.lacus@mauris.edu","(793) 754-6804","1624021870399","1987-02-06",4),
-  ("Natalie Christensen","sapien.cursus@auctor.com","(369) 798-6570","1659012254299","1984-06-21",4),
-  ("Merrill Palmer","mattis.Cras.eget@vitaesodalesat.ca","(650) 206-9707","1605042191199","1974-03-28",4),
-  ("Hope K. Dalton","faucibus.ut.nulla@malesuadamalesuada.net","(750) 173-3919","1672052344599","2000-09-18",3),
-  ("Kenyon J. Odonnell","felis@ipsumcursusvestibulum.org","(971) 216-7741","1645042735099","1999-05-22",5),
-  ("Neil Mercado","Praesent.interdum.ligula@utpellentesqueeget.co.uk","(534) 956-6017","1664050799899","1984-07-10",2),
-  ("Patricia P. Obrien","vehicula@odiovel.edu","(427) 385-3926","1666011364599","1981-04-23",5),
-  ("Briar V. Molina","lacus@lorem.com","(523) 397-8381","1637100348399","1991-07-21",3),
-  ("Nell P. Neal","felis@metus.co.uk","(842) 731-4970","1667010398899","1994-03-01",1),
-  ("Mufutau Mckinney","turpis.non@liberoInteger.ca","(484) 358-2964","1621041248799","1972-03-16",2),
-  ("Micah Pate","purus.gravida.sagittis@vitaealiquameros.com","(807) 216-5345","1649030659999","1988-07-18",5),
-  ("Byron Lamb","ullamcorper@Integer.net","(207) 431-3692","1618120702199","1990-09-21",3),
-  ("Cynthia Ferrell","Etiam@mauriserat.ca","(706) 183-8811","1631080755399","1988-09-28",4),
-  ("Erica Rush","adipiscing.lacus.Ut@ligulaelitpretium.com","(551) 698-6317","1647070106599","1998-03-06",4),
-  ("James R. Mcgee","quam.Pellentesque.habitant@dolor.ca","(769) 976-1647","1629091185899","1987-10-02",2),
-  ("Yen Perez","malesuada.vel@loremsit.edu","(833) 181-6510","1613080486199","1997-05-15",5),
-  ("Sara Garrison","sit.amet.luctus@nunc.co.uk","(127) 269-4713","1635101423599","1974-01-19",1),
-  ("Mason Castaneda","risus.Nulla@faucibus.com","(136) 691-6558","1639051945199","1999-08-27",4),
-  ("Quon T. Mays","tincidunt.pede.ac@Sedeu.edu","(954) 627-5782","1693102088199","1998-09-09",2),
-  ("Andrew Roy","dictum@libero.net","(581) 720-9274","1614122368399","1979-04-01",1),
-  ("Kyla Rogers","imperdiet.dictum.magna@Sedcongueelit.org","(915) 481-0097","1621011241699","1997-06-24",3),
-  ("Allistair Velasquez","porttitor.vulputate@commodohendreritDonec.co.uk","(598) 982-8138","1671010427199","1985-10-11",1),
-  ("Jillian Mccarthy","mauris@tincidunt.co.uk","(136) 664-4276","1628042655199","1989-07-20",2);
-
-  INSERT INTO `client_activity`
-  (`client_id`,`client_state_id`,`employee_id`,`date`,`time`)
-  VALUES
-  (8,2,7,"2016-08-01","13:07:22"),
-  (1,2,32,"2015-12-25","13:46:12"),
-  (39,1,6,"2016-07-22","13:31:35"),
-  (36,4,16,"2016-06-07","13:15:30"),
-  (5,1,28,"2015-03-23","13:07:26"),
-  (29,4,23,"2016-09-29","13:30:04"),
-  (9,1,8,"2016-04-12","13:47:00"),
-  (46,1,27,"2015-07-13","14:29:05"),
-  (43,4,37,"2016-03-22","14:13:27"),
-  (14,2,38,"2016-10-09","20:36:14"),
-  (19,3,29,"2015-12-05","20:04:30"),
-  (24,1,19,"2015-07-28","21:16:46"),
-  (13,1,8,"2015-07-07","21:33:32"),
-  (58,1,37,"2015-03-09","21:51:29"),
-  (42,4,30,"2015-12-10","21:39:32"),
-  (15,4,33,"2015-03-31","21:07:31"),
-  (14,3,5,"2016-05-10","21:56:39"),
-  (52,4,18,"2016-11-27","21:29:12"),
-  (14,1,25,"2016-04-14","22:10:34"),
-  (60,1,25,"2016-10-06","22:08:19");
-
 INSERT INTO `ingredient`
   (`name`)
 VALUES
@@ -247,6 +179,74 @@ VALUES
   (21,16,5),(22,7,2),(23,15,10),(24,16,10),(25,2,6),(26,10,3),(27,17,5),
   (28,4,5),(29,1,6),(30,16,9);
 
+INSERT INTO `employee`
+  (`full_name`,`email`,`mobile_number`,`tax_number`,`birth_date`,`employee_type_id`,`restaurant_id`)
+VALUES
+  ("Dakota Aguilar","et.risus.Quisque@variusultrices.ca","(355) 953-8246","1654040971299","1987-12-24",4,1),
+  ("Amena Y. Cash","semper.auctor.Mauris@tellus.co.uk","(446) 108-7471","1630072285299","1974-05-22",1,1),
+  ("Devin J. Crawford","erat.vitae.risus@Crasconvallisconvallis.co.uk","(751) 344-3466","1652081415899","1989-04-20",3,1),
+  ("Uriel D. Dyer","molestie@adipiscingelitCurabitur.org","(420) 501-2035","1676112816199","1991-02-20",3,1),
+  ("Dillon Turner","aliquet.molestie@ligulaAenean.edu","(652) 511-6803","1633100176899","1977-08-14",1,1),
+  ("Sasha Z. Huff","nec.imperdiet.nec@musDonecdignissim.edu","(951) 648-5609","1646082178699","1989-07-08",4,1),
+  ("Ray I. Pena","facilisis.magna.tellus@velest.co.uk","(695) 555-3857","1663040985699","1989-01-08",2,1),
+  ("Hiroko C. Hanson","egestas.Aliquam@taciti.net","(353) 846-7477","1668072360899","1979-01-24",3,1),
+  ("Buckminster X. Phelps","vitae@Quisqueliberolacus.co.uk","(619) 114-4403","1629021285399","1988-06-25",3,1),
+  ("Freya N. Todd","ante@acmattis.org","(584) 781-5239","1606121542799","1983-11-25",1,1),
+  ("Eleanor Williamson","nibh.Donec.est@leoin.ca","(405) 951-1001","1642123036099","1985-10-29",4,1),
+  ("Sasha Holloway","sem.ut.dolor@lectus.net","(520) 847-6634","1666013047399","1974-02-27",1,1),
+  ("Barclay H. Schwartz","accumsan.sed@inaliquet.edu","(517) 671-1041","1622062210799","1992-06-24",2,1),
+  ("Karleigh Grimes","imperdiet.nec.leo@Morbisitamet.org","(114) 198-3475","1666071984599","1993-09-30",1,2),
+  ("Vernon Z. Rodriquez","non.luctus.sit@nisl.net","(497) 600-7081","1622053063899","1988-04-26",5,2),
+  ("Ifeoma Merritt","a.felis@Integervitae.edu","(565) 906-5908","1672011860899","1977-12-25",1,2),
+  ("Hamish Mayer","faucibus@nisiMauris.ca","(594) 291-8506","1616050338999","1990-03-23",4,2),
+  ("Karen Estes","adipiscing.lacus@mauris.edu","(793) 754-6804","1624021870399","1987-02-06",4,2),
+  ("Natalie Christensen","sapien.cursus@auctor.com","(369) 798-6570","1659012254299","1984-06-21",4,2),
+  ("Merrill Palmer","mattis.Cras.eget@vitaesodalesat.ca","(650) 206-9707","1605042191199","1974-03-28",4,2),
+  ("Hope K. Dalton","faucibus.ut.nulla@malesuadamalesuada.net","(750) 173-3919","1672052344599","2000-09-18",3,2),
+  ("Kenyon J. Odonnell","felis@ipsumcursusvestibulum.org","(971) 216-7741","1645042735099","1999-05-22",5,2),
+  ("Neil Mercado","Praesent.interdum.ligula@utpellentesqueeget.co.uk","(534) 956-6017","1664050799899","1984-07-10",2,2),
+  ("Patricia P. Obrien","vehicula@odiovel.edu","(427) 385-3926","1666011364599","1981-04-23",5,2),
+  ("Briar V. Molina","lacus@lorem.com","(523) 397-8381","1637100348399","1991-07-21",3,2),
+  ("Nell P. Neal","felis@metus.co.uk","(842) 731-4970","1667010398899","1994-03-01",1,2),
+  ("Mufutau Mckinney","turpis.non@liberoInteger.ca","(484) 358-2964","1621041248799","1972-03-16",2,3),
+  ("Micah Pate","purus.gravida.sagittis@vitaealiquameros.com","(807) 216-5345","1649030659999","1988-07-18",5,3),
+  ("Byron Lamb","ullamcorper@Integer.net","(207) 431-3692","1618120702199","1990-09-21",3,3),
+  ("Cynthia Ferrell","Etiam@mauriserat.ca","(706) 183-8811","1631080755399","1988-09-28",4,3),
+  ("Erica Rush","adipiscing.lacus.Ut@ligulaelitpretium.com","(551) 698-6317","1647070106599","1998-03-06",4,3),
+  ("James R. Mcgee","quam.Pellentesque.habitant@dolor.ca","(769) 976-1647","1629091185899","1987-10-02",2,3),
+  ("Yen Perez","malesuada.vel@loremsit.edu","(833) 181-6510","1613080486199","1997-05-15",5,3),
+  ("Sara Garrison","sit.amet.luctus@nunc.co.uk","(127) 269-4713","1635101423599","1974-01-19",1,3),
+  ("Mason Castaneda","risus.Nulla@faucibus.com","(136) 691-6558","1639051945199","1999-08-27",4,3),
+  ("Quon T. Mays","tincidunt.pede.ac@Sedeu.edu","(954) 627-5782","1693102088199","1998-09-09",2,3),
+  ("Andrew Roy","dictum@libero.net","(581) 720-9274","1614122368399","1979-04-01",1,3),
+  ("Kyla Rogers","imperdiet.dictum.magna@Sedcongueelit.org","(915) 481-0097","1621011241699","1997-06-24",3,3),
+  ("Allistair Velasquez","porttitor.vulputate@commodohendreritDonec.co.uk","(598) 982-8138","1671010427199","1985-10-11",1,3),
+  ("Jillian Mccarthy","mauris@tincidunt.co.uk","(136) 664-4276","1628042655199","1989-07-20",2,3);
+
+INSERT INTO `client_activity`
+  (`client_id`,`client_state_id`,`employee_id`,`date`,`time`)
+VALUES
+  (8,2,7,"2016-08-01","13:07:22"),
+  (1,2,32,"2015-12-25","13:46:12"),
+  (39,1,6,"2016-07-22","13:31:35"),
+  (36,4,16,"2016-06-07","13:15:30"),
+  (5,1,28,"2015-03-23","13:07:26"),
+  (29,4,23,"2016-09-29","13:30:04"),
+  (9,1,8,"2016-04-12","13:47:00"),
+  (46,1,27,"2015-07-13","14:29:05"),
+  (43,4,37,"2016-03-22","14:13:27"),
+  (14,2,38,"2016-10-09","20:36:14"),
+  (19,3,29,"2015-12-05","20:04:30"),
+  (24,1,19,"2015-07-28","21:16:46"),
+  (13,1,8,"2015-07-07","21:33:32"),
+  (58,1,37,"2015-03-09","21:51:29"),
+  (42,4,30,"2015-12-10","21:39:32"),
+  (15,4,33,"2015-03-31","21:07:31"),
+  (14,3,5,"2016-05-10","21:56:39"),
+  (52,4,18,"2016-11-27","21:29:12"),
+  (14,1,25,"2016-04-14","22:10:34"),
+  (60,1,25,"2016-10-06","22:08:19");
+
 INSERT INTO `order_processing`
   (`client_order_id`,`order_state_id`,`employee_id`,`date`,`time`,`notes`)
 VALUES
@@ -268,13 +268,6 @@ VALUES
   (3,4,1,"2016-12-03","13:30:00",null),
   (3,5,1,"2016-12-03","13:40:00",null),
   (3,6,1,"2016-12-03","13:50:00",null);
-
-INSERT INTO `restaurant_employee`
-  (`restaurant_id`,`employee_id`)
-VALUES
-  (1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(1,7),(1,8),(1,9),(1,10),
-  (2,11),(2,12),(2,13),(2,14),(2,15),(2,16),(2,17),(2,18),(2,19),(2,20),
-  (3,21),(3,22),(3,23),(3,24),(3,25),(3,26),(3,27),(3,28),(3,29),(3,30);
 
 INSERT INTO `stock_ingredient`
   (`restaurant_id`,`ingredient_id`,`quantity`)

@@ -24,39 +24,6 @@ CREATE TABLE `employee_type` (
   `description` VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE `employee` (
-  `id` INTEGER PRIMARY KEY AUTO_INCREMENT,
-  `full_name` VARCHAR(255) NOT NULL,
-  `email` VARCHAR(255) NOT NULL,
-  `mobile_number` VARCHAR(255) NOT NULL,
-  `tax_number` VARCHAR(255) NOT NULL,
-  `birth_date` VARCHAR(255) NOT NULL,
-  `employee_type_id` INTEGER NOT NULL
-);
-
-CREATE INDEX `idx_employee__employee_type_id` ON `employee` (`employee_type_id`);
-
-ALTER TABLE `employee` ADD CONSTRAINT `fk_employee__employee_type_id` FOREIGN KEY (`employee_type_id`) REFERENCES `employee_type` (`id`);
-
-CREATE TABLE `client_activity` (
-  `client_id` INTEGER NOT NULL,
-  `client_state_id` INTEGER NOT NULL,
-  `employee_id` INTEGER,
-  `date` DATE NOT NULL,
-  `time` TIME NOT NULL,
-  PRIMARY KEY (`client_id`, `client_state_id`)
-);
-
-CREATE INDEX `idx_client_activity__client_state_id` ON `client_activity` (`client_state_id`);
-
-CREATE INDEX `idx_client_activity__employee_id` ON `client_activity` (`employee_id`);
-
-ALTER TABLE `client_activity` ADD CONSTRAINT `fk_client_activity__client_id` FOREIGN KEY (`client_id`) REFERENCES `client` (`id`);
-
-ALTER TABLE `client_activity` ADD CONSTRAINT `fk_client_activity__client_state_id` FOREIGN KEY (`client_state_id`) REFERENCES `client_state` (`id`);
-
-ALTER TABLE `client_activity` ADD CONSTRAINT `fk_client_activity__employee_id` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`);
-
 CREATE TABLE `ingredient` (
   `id` INTEGER PRIMARY KEY AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL
@@ -170,6 +137,44 @@ ALTER TABLE `client_order_product` ADD CONSTRAINT `fk_client_order_product__orde
 
 ALTER TABLE `client_order_product` ADD CONSTRAINT `fk_client_order_product__product_id` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`);
 
+CREATE TABLE `employee` (
+  `id` INTEGER PRIMARY KEY AUTO_INCREMENT,
+  `full_name` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(255) NOT NULL,
+  `mobile_number` VARCHAR(255) NOT NULL,
+  `tax_number` VARCHAR(255) NOT NULL,
+  `birth_date` VARCHAR(255) NOT NULL,
+  `employee_type_id` INTEGER NOT NULL,
+  `restaurant_id` INTEGER NOT NULL
+);
+
+CREATE INDEX `idx_employee__employee_type_id` ON `employee` (`employee_type_id`);
+
+CREATE INDEX `idx_employee__restaurant_id` ON `employee` (`restaurant_id`);
+
+ALTER TABLE `employee` ADD CONSTRAINT `fk_employee__employee_type_id` FOREIGN KEY (`employee_type_id`) REFERENCES `employee_type` (`id`);
+
+ALTER TABLE `employee` ADD CONSTRAINT `fk_employee__restaurant_id` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurant` (`id`);
+
+CREATE TABLE `client_activity` (
+  `client_id` INTEGER NOT NULL,
+  `client_state_id` INTEGER NOT NULL,
+  `employee_id` INTEGER,
+  `date` DATE NOT NULL,
+  `time` TIME NOT NULL,
+  PRIMARY KEY (`client_id`, `client_state_id`)
+);
+
+CREATE INDEX `idx_client_activity__client_state_id` ON `client_activity` (`client_state_id`);
+
+CREATE INDEX `idx_client_activity__employee_id` ON `client_activity` (`employee_id`);
+
+ALTER TABLE `client_activity` ADD CONSTRAINT `fk_client_activity__client_id` FOREIGN KEY (`client_id`) REFERENCES `client` (`id`);
+
+ALTER TABLE `client_activity` ADD CONSTRAINT `fk_client_activity__client_state_id` FOREIGN KEY (`client_state_id`) REFERENCES `client_state` (`id`);
+
+ALTER TABLE `client_activity` ADD CONSTRAINT `fk_client_activity__employee_id` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`);
+
 CREATE TABLE `order_processing` (
   `client_order_id` INTEGER NOT NULL,
   `order_state_id` INTEGER NOT NULL,
@@ -189,18 +194,6 @@ ALTER TABLE `order_processing` ADD CONSTRAINT `fk_order_processing__client_order
 ALTER TABLE `order_processing` ADD CONSTRAINT `fk_order_processing__employee_id` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`);
 
 ALTER TABLE `order_processing` ADD CONSTRAINT `fk_order_processing__order_state_id` FOREIGN KEY (`order_state_id`) REFERENCES `order_state` (`id`);
-
-CREATE TABLE `restaurant_employee` (
-  `restaurant_id` INTEGER NOT NULL,
-  `employee_id` INTEGER NOT NULL,
-  PRIMARY KEY (`restaurant_id`, `employee_id`)
-);
-
-CREATE INDEX `idx_restaurant_employee__employee_id` ON `restaurant_employee` (`employee_id`);
-
-ALTER TABLE `restaurant_employee` ADD CONSTRAINT `fk_restaurant_employee__employee_id` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`);
-
-ALTER TABLE `restaurant_employee` ADD CONSTRAINT `fk_restaurant_employee__restaurant_id` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurant` (`id`);
 
 CREATE TABLE `stock_ingredient` (
   `restaurant_id` INTEGER NOT NULL,

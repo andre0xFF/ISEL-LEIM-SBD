@@ -1,0 +1,33 @@
+mySQL:
+  Connect: mysql -u root -p
+  Create database: CREATE DATABASE database;
+  Drop database: DROP DATABASE database;
+  Create database backup: mysqldump -u root -p DATABASE_NAME > backup.sql
+  Restore a database backup: mysql -u root -p DATABASE_NAME < backup.sql
+  Tables: SHOW TABLES;
+  Select table: USE table;
+
+Order:
+01. client
+02. client_state
+03. employee_type
+04. employee
+05. client_activity
+06. ingredient
+07. order_state
+08. product_menu
+09. product_type
+10. product
+11. product_ingredient
+12. product_menu_type
+13. product_recipe
+14. restaurant
+15. client_order
+16. client_order_product
+17. order_processing
+18. restaurant_employee
+19. stock_ingredient
+20. stock_product
+21. supplier
+22. supplier_ingredient
+23. supplier_product

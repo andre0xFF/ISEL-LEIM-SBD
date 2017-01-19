@@ -12,62 +12,53 @@ public class Bot {
 
 	public void run() {
 
-		@SuppressWarnings("resource")
-		Scanner scanner = new Scanner(System.in);
-		String input;
+		String in;
+		int idx = -1;
 
-		do {
-			System.out.printf("%s\n", IO.fetch_one(Outputs.welcome));
+		while (true) {
+			Output.write(String.format("%s\n", Output.get_welcome()));
+
 			String[] profiles_names = new String[profiles.length];
-			// print options
-			// build profiles names for further use
 			for (int i = 0; i < profiles.length; i++) {
-				profiles_names[i] = profiles[i].get_descriptions(0);
-				System.out.printf("%d. %s\n", i + 1, profiles_names[i]);
+				profiles_names[i] = profiles[i].get_profile_name();
 			}
-			// read user input
-			System.out.printf("\n> ");
-			input = scanner.nextLine();
-			// check if the user wants to logout
-			if (IO.find_option(Inputs.logout, input) > -1) {
-				return;
-			}
-			// check what option the user has chosen
-			int idx = -1;
 
-			try {
-				// is it a number?
-				idx = IO.find_option(profiles_names, Integer.parseInt(input));
+			Output.write(Menu.print(profiles_names));
+			idx = Input.get_user_option(profiles_names);
 
-			} catch(NumberFormatException nfe) {
-				// maybe its some sort of profile description
-				for (int i = 0; i < profiles.length; i++) {
-					String[] descriptions = profiles[i].get_descriptions();
+			if (idx == -2) { return; }
 
-					if (IO.find_option(descriptions, input) > -1) {
-						idx = i;
-						break;
-					}
-				}
-			}
-			// was the option found?
-			if (idx < 0) {
-				continue;
-			}
 			// get the chosen profile
 			this.user = profiles[idx];
-			System.out.printf("%s %s\n", this.user.get_greeting(), IO.fetch_one(Outputs.welcome_profile));
+			Output.write(String.format("%s %s\n", this.user.get_greeting(), Output.get_welcome_profile()));
+
 			// run the profile
 			this.user.run();
+
 			// the user has logged out by now, clear the screen and loop
-			this.clear_screen();
-
-		} while (IO.find_option(Inputs.logout, input) == -1);
+			Output.clear_screen();
+		}
 	}
+}
 
-	private void clear_screen() {
+interface Profile {
 
-		System.out.print("\033[H\033[2J");
+	public void run();
+	public String get_profile_name();
+	public String get_greeting();
+}
+
+interface Menu {
+
+	public String[] get_menu_options();
+
+	public static String print(String[] options) {
+		String output = "";
+		for (int i = 0; i < options.length; i++) {
+			output += String.valueOf(i + 1) + ". " + options[i] + "\n";
+		}
+
+		return output;
 	}
 }
 
@@ -77,10 +68,23 @@ interface IO {
 		return options[ThreadLocalRandom.current().nextInt(0, options.length)];
 	}
 
-	public static int find_option(String[] inputs, String input) {
+	public static String[] get_all_forms(String input) {
 
-		for (int i = 0; i < inputs.length; i++) {
-			if (input.contains(inputs[i])) {
+		String[] forms = {
+			input.toLowerCase(),
+			input.toLowerCase(),
+			input.toUpperCase()
+		};
+
+		forms[1] = forms[1].substring(0, 1).toUpperCase() + forms[1].substring(1);
+
+		return forms;
+	}
+
+	public static int find_option_idx(String[] options, String input) {
+
+		for (int i = 0; i < options.length; i++) {
+			if (IO.find_option(options[i], input)) {
 				return i;
 			}
 		}
@@ -88,165 +92,274 @@ interface IO {
 		return -1;
 	}
 
-	public static int find_option(String[] inputs, int option) {
+	public static boolean find_option(String[] options, String input) {
 
-		for (int i = 0; i < inputs.length; i++) {
-			if (option == i + 1) {
-				return i;
+		return (IO.find_option_idx(options, input) > -1);
+	}
+
+	public static boolean find_option(String option, String input) {
+
+		String[] forms = get_all_forms(option);
+
+		for (int i = 0; i < forms.length; i++) {
+			if (input.contains(forms[i]) || forms[i].contains(input)) {
+				return true;
 			}
 		}
 
-		return -1;
+		return false;
 	}
 }
 
-class Inputs implements IO {
+class Input implements IO {
 
 	public final static String[] logout = {
 		"Bye",
 		"Logout",
-		"bye",
-		"logout",
 		"Exit",
-		"exit"
+		"Adious",
+		"Cya",
+		"Adeus"
 	};
+
+	public static String read() {
+		@SuppressWarnings("resource")
+		Scanner scanner = new Scanner(System.in);
+		String input;
+
+		System.out.printf("\n> ");
+		input = scanner.nextLine();
+		System.out.printf("\n");
+		return input;
+	}
+
+	public static int get_user_option(String[] options) {
+		String in = Input.read();
+
+		// check if the user wants to logout
+		if (IO.find_option(Input.logout, in)) {
+			return -2;
+		}
+
+		// check what option the user has chosen
+		int idx = -1;
+
+		try {
+			// is it a number?
+			int aux = Integer.parseInt(in.substring(0, 1));
+
+			if (aux >= 0 && aux <= options.length) {
+				idx = aux - 1;
+			}
+
+		} catch(NumberFormatException nfe) {
+			// maybe its a profile description
+			idx = IO.find_option_idx(options, in);
+		}
+
+		if (idx == -1) {
+			Output.write("I'm sorry I didn't get that. Can you repeat?\n");
+			return get_user_option(options);
+		}
+
+		return idx;
+	}
 }
 
-class Outputs implements IO {
+class Output implements IO {
 
 	public final static String[] welcome = {
-		"Welcome! I'm the restaurant assistant. Who are you?\n\n",
-		"I am known by many names, but you may call me... Tim.\nSo, who are you?\n",
-		"Great, the digital pimp at work.\n",
-		"I am the one!\n",
-		"Whoa! Who are you?\n",
-		"If real is what you can feel, smell, taste and see, then 'real' is simply electrical signals interpreted by your brain (Morpheus)\n",
-		"My name...... Is Neo! And if you are not Agent Smith, then who are you?\n"
+		"Welcome! I'm the restaurant assistant. Who are you?",
+		"I am known by many names, but you may call me... Tim.\nSo, who are you?",
+		"Great, the digital pimp at work.",
+		"I am the one!",
+		"Whoa! Who are you?",
+		"If real is what you can feel, smell, taste and see, then 'real' is simply electrical signals interpreted by your brain (Morpheus)\nWhat's your input?",
+		"My name...... is Neo! And if you are not Agent Smith, then who are you?"
 	};
 
 	public final static String[] welcome_profile = {
-		"What can I do for you?\n",
-		"How many I help you?\n",
-		"At votre service! (french)\n"
+		"What can I do for you?",
+		"How many I help you?",
+		"At votre service! (french)"
 	};
+
+	public static String get_welcome() { return IO.fetch_one(Output.welcome); }
+	public static String get_welcome_profile() { return IO.fetch_one(Output.welcome_profile); }
+
+	public static void write(String s) {
+		System.out.printf("%s\n", s);
+	}
+
+	public static void write(int i) {
+
+		Output.write(String.valueOf(i));
+	}
+
+	public static void clear_screen() {
+
+		System.out.print("\033[H\033[2J");
+	}
 }
 
-interface Profile {
+interface Client_model {
 
-	public void run();
-	public String[] get_descriptions();
-	public String get_greeting();
-	public String get_descriptions(int i);
-	public String[] get_options();
+	public String get_name();
+	public int get_id();
 }
 
-class Client implements Profile {
+class Client implements Profile, Menu, Client_model {
 
-	final String[] descriptions = { "Client", "client" };
+	final String profile_name = "Client";
 	final String greeting = "Welcome!";
+	final String[] menu_options = {
+		"View today's menu",
+		" - Filter by ingredient",
+		" - Remove ingredient",
+		"Make an order",
+		"View recipe",
+		"Find nearest restaurant"
+	};
+
+	String name = "";
+	int id;
+
+	@Override
+	public String[] get_menu_options() { return this.menu_options; }
+	@Override
+	public String get_greeting() { return this.greeting; }
+	@Override
+	public String get_profile_name() { return this.profile_name; }
+	@Override
+	public String get_name() { return this.name; }
+	@Override
+	public int get_id() { return this.id; }
 
 	public Client() {}
 
 	@Override
-	public String[] get_descriptions() { return this.descriptions; }
-	@Override
-	public String get_descriptions(int i) { return this.descriptions[i]; }
-	@Override
-	public String get_greeting() { return this.greeting; }
-
-	@Override
 	public void run() {
-		Scanner scanner = new Scanner(System.in);
+		String in;
+		int idx = -1;
 
+		while (true) {
+			Output.write(Menu.print(this.menu_options));
 
-	}
+			idx = Input.get_user_option(menu_options);
 
-	@Override
-	public String[] get_options() {
-		// TODO Auto-generated method stub
-		return null;
+			if (idx == -2) { return; }
+
+			Output.write(idx);
+		}
 	}
 }
 
-class Chef implements Profile {
+class Chef implements Profile, Menu {
 
-	final String[] descriptions = { "Chef", "chef" };
-	final String greeting = "Bonjour Chef!";
+	final String profile_name = "Chef";
+	final String greeting = "Bonjour chef!";
+	final String[] menu_options = {
+		"View current orders",
+		"Manage orders"
+	};
+
+	@Override
+	public String[] get_menu_options() { return this.menu_options; }
 
 	public Chef() {}
 
 	@Override
-	public String[] get_descriptions() { return this.descriptions; }
-	@Override
-	public String get_descriptions(int i) { return this.descriptions[i]; }
-	@Override
 	public String get_greeting() { return this.greeting; }
+	@Override
+	public String get_profile_name() { return this.profile_name; }
 
 	@Override
 	public void run() {
-		Scanner scanner = new Scanner(System.in);
+		String in;
+		int idx = -1;
 
-	}
+		while (true) {
+			Output.write(Menu.print(this.menu_options));
 
-	@Override
-	public String[] get_options() {
-		// TODO Auto-generated method stub
-		return null;
+			idx = Input.get_user_option(menu_options);
+
+			if (idx == -2) { return; }
+
+		}
 	}
 }
 
-class Owner implements Profile {
+class Owner implements Profile, Menu {
 
-	final String[] descriptions = { "Owner", "owner" };
+	final String profile_name = "Owner";
 	final String greeting = "Hi boss!";
+	final String[] menu_options = {
+		"View ingredients and their stock",
+		"View suppliers and make orders",
+		"Show three most sold items of the week",
+		"Show three most profitable item of the week",
+		"Show items by average preparation time",
+		"Show clients sorted by amount spent",
+		"Check item details"
+	};
+
+	@Override
+	public String[] get_menu_options() { return this.menu_options; }
 
 	public Owner() {}
 
 	@Override
-	public String[] get_descriptions() { return this.descriptions; }
-	@Override
-	public String get_descriptions(int i) { return this.descriptions[i]; }
-	@Override
 	public String get_greeting() { return this.greeting; }
+	@Override
+	public String get_profile_name() { return this.profile_name; }
 
 	@Override
 	public void run() {
-		Scanner scanner = new Scanner(System.in);
+		String in;
+		int idx = -1;
 
-	}
+		while (true) {
+			Output.write(Menu.print(this.menu_options));
 
-	@Override
-	public String[] get_options() {
-		// TODO Auto-generated method stub
-		return null;
+			idx = Input.get_user_option(menu_options);
+
+			if (idx == -2) { return; }
+
+		}
 	}
 }
 
-class Waitress implements Profile {
+class Waitress implements Profile, Menu {
 
-	final String[] descriptions = { "Waitress", "waitress" };
+	final String profile_name = "Waitress";
 	final String greeting = "Hi there!";
+	final String[] menu_options = {
+		"View orders that are ready"
+	};
+
+	@Override
+	public String[] get_menu_options() { return this.menu_options; }
 
 	public Waitress() {}
 
 	@Override
-	public String[] get_descriptions() { return this.descriptions; }
-	@Override
-	public String get_descriptions(int i) { return this.descriptions[i]; }
-	@Override
 	public String get_greeting() { return this.greeting; }
+	@Override
+	public String get_profile_name() { return this.profile_name; }
 
 	@Override
 	public void run() {
-		Scanner scanner = new Scanner(System.in);
+		String in;
+		int idx = -1;
 
+		while (true) {
+			Output.write(Menu.print(this.menu_options));
+
+			idx = Input.get_user_option(menu_options);
+
+			if (idx == -2) { return; }
+
+		}
 	}
-
-	@Override
-	public String[] get_options() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 
 }

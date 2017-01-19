@@ -75,12 +75,12 @@ VALUES
 INSERT INTO `employee_type`
   (`title`,`description`)
 VALUES
-  ("Junior Chef",null),
-  ("Chef",null),
-  ("Senior Chef",null),
-  ("Junior Waitress",null),
-  ("Waitress",null),
-  ("Owner",null);
+  ("Junior Chef","Wannabe a fine chef"),
+  ("Chef","Thinks he can cooks"),
+  ("Senior Chef","Too much cholesterol"),
+  ("Junior Waitress","Just paying the bills"),
+  ("Waitress","Too many bills"),
+  ("Owner","Make me some food");
 
 INSERT INTO `ingredient`
   (`name`)

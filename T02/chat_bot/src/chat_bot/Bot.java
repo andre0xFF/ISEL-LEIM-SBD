@@ -19,25 +19,28 @@ public class Bot {
 		do {
 			System.out.printf("%s\n", IO.fetch_one(Outputs.welcome));
 			String[] profiles_names = new String[profiles.length];
-
+			// print options
+			// build profiles names for further use
 			for (int i = 0; i < profiles.length; i++) {
 				profiles_names[i] = profiles[i].get_descriptions(0);
 				System.out.printf("%d. %s\n", i + 1, profiles_names[i]);
 			}
-
+			// read user input
 			System.out.printf("\n> ");
 			input = scanner.nextLine();
-
+			// check if the user wants to logout
 			if (IO.find_option(Inputs.logout, input) > -1) {
 				return;
 			}
-
+			// check what option the user has chosen
 			int idx = -1;
 
 			try {
+				// is it a number?
 				idx = IO.find_option(profiles_names, Integer.parseInt(input));
 
 			} catch(NumberFormatException nfe) {
+				// maybe its some sort of profile description
 				for (int i = 0; i < profiles.length; i++) {
 					String[] descriptions = profiles[i].get_descriptions();
 
@@ -47,14 +50,16 @@ public class Bot {
 					}
 				}
 			}
-
+			// was the option found?
 			if (idx < 0) {
 				continue;
 			}
-
+			// get the chosen profile
 			this.user = profiles[idx];
 			System.out.printf("%s %s\n", this.user.get_greeting(), IO.fetch_one(Outputs.welcome_profile));
+			// run the profile
 			this.user.run();
+			// the user has logged out by now, clear the screen and loop
 			this.clear_screen();
 
 		} while (IO.find_option(Inputs.logout, input) == -1);

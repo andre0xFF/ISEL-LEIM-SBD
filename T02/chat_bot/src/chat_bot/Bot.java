@@ -1,18 +1,21 @@
 package chat_bot;
 
+import java.sql.SQLException;
 import java.util.Random;
 import java.util.Scanner;
+
+import database.SBD;
 
 public class Bot {
 
 	Profile user;
-	Profile[] profiles = { new Client(), new Chef(), new Owner(), new Waitress() };
+	Profile[] profiles;
 
-	public void Bot() {}
+	public Bot(Profile[] profiles) {
+		this.profiles = profiles;
+	}
 
 	public void run() {
-
-		String in;
 		int idx = -1;
 
 		while (true) {
@@ -30,7 +33,11 @@ public class Bot {
 
 			// get the chosen profile
 			this.user = profiles[idx];
-			Output.write(String.format("%s %s\n", this.user.get_greeting(), Output.get_welcome_profile()));
+			try {
+				Output.write(String.format("%s %s\n", this.user.get_greeting(), Output.get_welcome_profile()));
+			} catch (UserNotFoundException e) {
+				Output.write(e.getMessage());
+			}
 
 			// run the profile
 			this.user.run();
@@ -45,7 +52,7 @@ interface Profile {
 
 	public void run();
 	public String get_profile_name();
-	public String get_greeting();
+	public String get_greeting() throws UserNotFoundException;
 }
 
 interface Menu {
@@ -199,9 +206,10 @@ interface Client_model {
 
 class Client implements Profile, Menu, Client_model {
 
-	final String profile_name = "Client";
-	final String greeting = "Welcome!";
-	final String[] menu_options = {
+	private SBD db;
+	public final String PROFILE_NAME = "Client";
+	public final String GREETING = "Welcome!";
+	public final String[] MENU_OPTIONS = {
 		"View today's menu",
 		" - Filter by ingredient",
 		" - Remove ingredient",
@@ -214,27 +222,28 @@ class Client implements Profile, Menu, Client_model {
 	int id;
 
 	@Override
-	public String[] get_menu_options() { return this.menu_options; }
+	public String[] get_menu_options() { return this.MENU_OPTIONS; }
 	@Override
-	public String get_greeting() { return this.greeting; }
+	public String get_greeting() { return this.GREETING; }
 	@Override
-	public String get_profile_name() { return this.profile_name; }
+	public String get_profile_name() { return this.PROFILE_NAME; }
 	@Override
 	public String get_name() { return this.name; }
 	@Override
 	public int get_id() { return this.id; }
 
-	public Client() {}
+	public Client(SBD database) {
+		this.db = database;
+	}
 
 	@Override
 	public void run() {
-		String in;
 		int idx = -1;
 
 		while (true) {
-			Output.write(Menu.print(this.menu_options));
+			Output.write(Menu.print(this.MENU_OPTIONS));
 
-			idx = Input.get_user_option(menu_options);
+			idx = Input.get_user_option(MENU_OPTIONS);
 
 			if (idx == -2) { return; }
 
@@ -245,32 +254,34 @@ class Client implements Profile, Menu, Client_model {
 
 class Chef implements Profile, Menu {
 
-	final String profile_name = "Chef";
-	final String greeting = "Bonjour chef!";
-	final String[] menu_options = {
+	private SBD db;
+	public final String PROFILE_NAME = "Chef";
+	public final String GREETING = "Bonjour chef!";
+	public final String[] MENU_OPTIONS = {
 		"View current orders",
 		"Manage orders"
 	};
 
 	@Override
-	public String[] get_menu_options() { return this.menu_options; }
+	public String[] get_menu_options() { return this.MENU_OPTIONS; }
 	@Override
-	public String get_greeting() { return this.greeting; }
+	public String get_greeting() { return this.GREETING; }
 	@Override
-	public String get_profile_name() { return this.profile_name; }
+	public String get_profile_name() { return this.PROFILE_NAME; }
 
 
-	public Chef() {}
+	public Chef(SBD database) {
+		this.db = database;
+	}
 
 	@Override
 	public void run() {
-		String in;
 		int idx = -1;
 
 		while (true) {
-			Output.write(Menu.print(this.menu_options));
+			Output.write(Menu.print(this.MENU_OPTIONS));
 
-			idx = Input.get_user_option(menu_options);
+			idx = Input.get_user_option(MENU_OPTIONS);
 
 			if (idx == -2) { return; }
 
@@ -280,9 +291,10 @@ class Chef implements Profile, Menu {
 
 class Owner implements Profile, Menu {
 
-	final String profile_name = "Owner";
-	final String greeting = "Hi boss!";
-	final String[] menu_options = {
+	private SBD db;
+	public final String PROFILE_NAME = "Owner";
+	public final String GREETING = "Hello";
+	public final String[] MENU_OPTIONS = {
 		"View ingredients and their stock",
 		"View suppliers and make orders",
 		"Show three most sold items of the week",
@@ -293,23 +305,35 @@ class Owner implements Profile, Menu {
 	};
 
 	@Override
-	public String[] get_menu_options() { return this.menu_options; }
+	public String[] get_menu_options() { return this.MENU_OPTIONS; }
 	@Override
-	public String get_greeting() { return this.greeting; }
-	@Override
-	public String get_profile_name() { return this.profile_name; }
+	public String get_greeting() throws UserNotFoundException {
+		String greeting = this.GREETING;
+		
+		try {
+			greeting += " " + db.get_owner()[1];
+		} catch (SQLException e) {
+			throw new UserNotFoundException("Owner not found");
+		}
 
-	public Owner() {}
+		
+		return greeting;
+	}
+	@Override
+	public String get_profile_name() { return this.PROFILE_NAME; }
+
+	public Owner(SBD database) {
+		this.db = database;
+	}
 
 	@Override
 	public void run() {
-		String in;
 		int idx = -1;
 
 		while (true) {
-			Output.write(Menu.print(this.menu_options));
+			Output.write(Menu.print(this.MENU_OPTIONS));
 
-			idx = Input.get_user_option(menu_options);
+			idx = Input.get_user_option(MENU_OPTIONS);
 
 			if (idx == -2) { return; }
 
@@ -319,34 +343,34 @@ class Owner implements Profile, Menu {
 
 class Waitress implements Profile, Menu {
 
-	final String profile_name = "Waitress";
-	final String greeting = "Hi there!";
-	final String[] menu_options = {
+	private SBD db;
+	public final String PROFILE_NAME = "Waitress";
+	public final String GREETING = "Hi there!";
+	public final String[] MENU_OPTIONS = {
 		"View orders that are ready"
 	};
 
 	@Override
-	public String[] get_menu_options() { return this.menu_options; }
-
-	public Waitress() {}
-
+	public String[] get_menu_options() { return this.MENU_OPTIONS; }
 	@Override
-	public String get_greeting() { return this.greeting; }
+	public String get_greeting() { return this.GREETING; }
 	@Override
-	public String get_profile_name() { return this.profile_name; }
+	public String get_profile_name() { return this.PROFILE_NAME; }
+
+	public Waitress(SBD database) {
+		this.db = database;
+	}
 
 	@Override
 	public void run() {
-		String in;
 		int idx = -1;
 
 		while (true) {
-			Output.write(Menu.print(this.menu_options));
+			Output.write(Menu.print(this.MENU_OPTIONS));
 
-			idx = Input.get_user_option(menu_options);
+			idx = Input.get_user_option(MENU_OPTIONS);
 
 			if (idx == -2) { return; }
-
 		}
 	}
 

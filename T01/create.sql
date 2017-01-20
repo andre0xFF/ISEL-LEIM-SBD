@@ -145,7 +145,8 @@ CREATE TABLE `employee` (
   `tax_number` VARCHAR(255) NOT NULL,
   `birth_date` VARCHAR(255) NOT NULL,
   `employee_type_id` INTEGER NOT NULL,
-  `restaurant_id` INTEGER NOT NULL
+  `restaurant_id` INTEGER NOT NULL,
+  `owner` BOOLEAN NOT NULL
 );
 
 CREATE INDEX `idx_employee__employee_type_id` ON `employee` (`employee_type_id`);

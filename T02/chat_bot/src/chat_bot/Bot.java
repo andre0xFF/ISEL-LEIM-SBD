@@ -1,7 +1,7 @@
 package chat_bot;
 
+import java.util.Random;
 import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Bot {
 
@@ -64,21 +64,8 @@ interface Menu {
 
 interface IO {
 
-	public static String fetch_one(String[] options) {
-		return options[ThreadLocalRandom.current().nextInt(0, options.length)];
-	}
-
-	public static String[] get_all_forms(String input) {
-
-		String[] forms = {
-			input.toLowerCase(),
-			input.toLowerCase(),
-			input.toUpperCase()
-		};
-
-		forms[1] = forms[1].substring(0, 1).toUpperCase() + forms[1].substring(1);
-
-		return forms;
+	public static String random_option(String[] options) {
+		return options[new Random().nextInt(options.length)];
 	}
 
 	public static int find_option_idx(String[] options, String input) {
@@ -99,15 +86,10 @@ interface IO {
 
 	public static boolean find_option(String option, String input) {
 
-		String[] forms = get_all_forms(option);
+		option = option.toLowerCase();
+		input = input.toLowerCase();
 
-		for (int i = 0; i < forms.length; i++) {
-			if (input.contains(forms[i]) || forms[i].contains(input)) {
-				return true;
-			}
-		}
-
-		return false;
+		return (input.contains(option) || option.contains(input));
 	}
 }
 
@@ -152,13 +134,13 @@ class Input implements IO {
 				idx = aux - 1;
 			}
 
-		} catch(NumberFormatException nfe) {
+		} catch (NumberFormatException nfe) {
 			// maybe its a profile description
 			idx = IO.find_option_idx(options, in);
 		}
 
 		if (idx == -1) {
-			Output.write("I'm sorry I didn't get that. Can you repeat?\n");
+			Output.write(IO.random_option(Output.unknown));
 			return get_user_option(options);
 		}
 
@@ -184,15 +166,22 @@ class Output implements IO {
 		"At votre service! (french)"
 	};
 
-	public static String get_welcome() { return IO.fetch_one(Output.welcome); }
-	public static String get_welcome_profile() { return IO.fetch_one(Output.welcome_profile); }
+	public final static String[] unknown = {
+		"I'm sorry I didn't get that. Can you repeat?",
+		"Pardon?",
+		"Comando desconhecido.",
+		"Did you misspell something?",
+		"I'm not sure what you mean.. Write a command or the command option."
+	};
+
+	public static String get_welcome() { return IO.random_option(Output.welcome); }
+	public static String get_welcome_profile() { return IO.random_option(Output.welcome_profile); }
 
 	public static void write(String s) {
 		System.out.printf("%s\n", s);
 	}
 
 	public static void write(int i) {
-
 		Output.write(String.valueOf(i));
 	}
 
@@ -265,13 +254,13 @@ class Chef implements Profile, Menu {
 
 	@Override
 	public String[] get_menu_options() { return this.menu_options; }
-
-	public Chef() {}
-
 	@Override
 	public String get_greeting() { return this.greeting; }
 	@Override
 	public String get_profile_name() { return this.profile_name; }
+
+
+	public Chef() {}
 
 	@Override
 	public void run() {
@@ -305,13 +294,12 @@ class Owner implements Profile, Menu {
 
 	@Override
 	public String[] get_menu_options() { return this.menu_options; }
-
-	public Owner() {}
-
 	@Override
 	public String get_greeting() { return this.greeting; }
 	@Override
 	public String get_profile_name() { return this.profile_name; }
+
+	public Owner() {}
 
 	@Override
 	public void run() {

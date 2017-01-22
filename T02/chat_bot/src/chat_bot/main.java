@@ -2,16 +2,16 @@ package chat_bot;
 
 import java.sql.SQLException;
 
-import database.SBD;
-
 public class main {
 
-	public final static int RESTAURANT = 9;
+	public final static int RESTAURANT = 1;
 	public static void main(String[] args) {
 
 //		MySQL.test_stored_procedure();
 		SBD db;
 		Bot bot;
+		
+		// TODO insert ready orders for current day
 
 		try {
 			db = new SBD(RESTAURANT);
@@ -25,8 +25,9 @@ public class main {
 			);
 			bot.run();
 			db.close();
+			Output.clear_screen();
 		} catch (SQLException e) {
-			System.out.println("Error connecting to database!");
+			System.out.println("Communications link failure.");
 		}
 	}
 

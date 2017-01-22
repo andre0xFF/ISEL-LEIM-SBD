@@ -1,10 +1,9 @@
 package chat_bot;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Random;
 import java.util.Scanner;
-
-import database.SBD;
 
 public class Bot {
 
@@ -15,7 +14,7 @@ public class Bot {
 		this.profiles = profiles;
 	}
 
-	public void run() {
+	public void run() throws SQLException {
 		int idx = -1;
 
 		while (true) {
@@ -33,16 +32,18 @@ public class Bot {
 
 			// get the chosen profile
 			this.user = profiles[idx];
+
 			try {
 				Output.write(String.format("%s %s\n", this.user.get_greeting(), Output.get_welcome_profile()));
-			} catch (UserNotFoundException e) {
+				this.user.run();
+				Thread.sleep(3500);
+
+			} catch (User_not_found e) {
 				Output.write(e.getMessage());
-			}
 
-			// run the profile
-			this.user.run();
+			} catch (InterruptedException e) {}
 
-			// the user has logged out by now, clear the screen and loop
+			// the user logged out by now, clear the screen and loop
 			Output.clear_screen();
 		}
 	}
@@ -50,9 +51,9 @@ public class Bot {
 
 interface Profile {
 
-	public void run();
+	public void run() throws SQLException;
 	public String get_profile_name();
-	public String get_greeting() throws UserNotFoundException;
+	public String get_greeting() throws User_not_found, SQLException;
 }
 
 interface Menu {
@@ -108,6 +109,7 @@ class Input implements IO {
 		"Exit",
 		"Adious",
 		"Cya",
+
 		"Adeus"
 	};
 
@@ -159,12 +161,15 @@ class Output implements IO {
 
 	public final static String[] welcome = {
 		"Welcome! I'm the restaurant assistant. Who are you?",
-		"I am known by many names, but you may call me... Tim.\nSo, who are you?",
-		"Great, the digital pimp at work.",
+		"I am known by many names, but you may call me... Tim. - Graham Chapman\n\nSo, who are you?",
+		"Great, the digital pimp hard at work. - Switch, in The Matrix",
 		"I am the one!",
 		"Whoa! Who are you?",
-		"If real is what you can feel, smell, taste and see, then 'real' is simply electrical signals interpreted by your brain (Morpheus)\nWhat's your input?",
-		"My name...... is Neo! And if you are not Agent Smith, then who are you?"
+		"If real is what you can feel, smell, taste and see, then 'real' is simply electrical signals interpreted by your brain. - Morpheus in The Matrix\n\nWhat's your input?",
+		"My name...... is Neo! And if you are not Agent Smith, then who are you?",
+		"You say freak, I say unique. - Christian Baloga",
+		"People think that I must be a very strange person. This is not correct. I have the heart of a small boy. It is in a glass jar on my desk. - Stephen King",
+		"So how do you plan on saving the world?” — Cooper\n\nWe’re not meant to save the world, we’re meant to leave it.” — Brand in Interstellar\n\n"
 	};
 
 	public final static String[] welcome_profile = {
@@ -179,6 +184,13 @@ class Output implements IO {
 		"Comando desconhecido.",
 		"Did you misspell something?",
 		"I'm not sure what you mean.. Write a command or the command option."
+	};
+
+	public final static String[] stranger = {
+		"There is something fishy..",
+		"Do I know you?",
+		"Wait.. who?",
+		"I don't recognize your bytecode."
 	};
 
 	public static String get_welcome() { return IO.random_option(Output.welcome); }
@@ -307,17 +319,13 @@ class Owner implements Profile, Menu {
 	@Override
 	public String[] get_menu_options() { return this.MENU_OPTIONS; }
 	@Override
-	public String get_greeting() throws UserNotFoundException {
-		String greeting = this.GREETING;
-		
-		try {
-			greeting += " " + db.get_owner()[1];
-		} catch (SQLException e) {
-			throw new UserNotFoundException("Owner not found");
-		}
+	public String get_greeting() throws SQLException {
+		String owner = "";
 
-		
-		return greeting;
+		try { owner = db.get_owner(); }
+		catch (User_not_found e) { Output.write(e.getMessage()); }
+
+		return this.GREETING + " " + owner;
 	}
 	@Override
 	public String get_profile_name() { return this.PROFILE_NAME; }
@@ -362,7 +370,7 @@ class Waitress implements Profile, Menu {
 	}
 
 	@Override
-	public void run() {
+	public void run() throws SQLException {
 		int idx = -1;
 
 		while (true) {
@@ -371,7 +379,19 @@ class Waitress implements Profile, Menu {
 			idx = Input.get_user_option(MENU_OPTIONS);
 
 			if (idx == -2) { return; }
+
+			if (idx == 0) { this.write_ready_orders(); }
 		}
+	}
+
+	private void write_ready_orders() throws SQLException {
+
+		try {
+			String r = db.get_ready_orders();
+		} catch (No_orders_found e) {
+			Output.write(e.getMessage());
+		}
+
 	}
 
 }

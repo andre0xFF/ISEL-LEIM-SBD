@@ -32,6 +32,10 @@ public class MySQL {
 			stmt = connection.createStatement();
 			rs = stmt.executeQuery(query);
 			
+			rs.close();
+			stmt.close();
+			connection.close();
+			
 		} catch (Exception e) {
 			return false;
 		}

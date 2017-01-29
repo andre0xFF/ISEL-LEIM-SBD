@@ -131,11 +131,11 @@ VALUES
 	("AB0A9F15-D341-6F87-6F6D-CDDF1177B684","Octopus a la lagareiro",null,"2016-12-28",22,3);
 
 INSERT INTO `product_ingredient`
-	(`product_id`,`ingredient_id`)
+	(`product_id`,`ingredient_id`,`quantity`)
 VALUES
-	(7,1),(7,2),(7,3),(7,4),(8,1),(8,2),(8,10),(8,20),(9,20),
-	(9,3),(9,7),(9,15),(10,15),(10,12),(10,11),(10,10),(11,10),
-	(11,8),(11,5),(11,18),(11,14),(12,15);
+	(7,1,10),(7,2,3),(7,3,3),(7,4,3),(8,1,3),(8,2,3),(8,10,3),(8,20,3),(9,20,3),
+	(9,3,3),(9,7,3),(9,15,3),(10,15,3),(10,12,3),(10,11,3),(10,10,3),(11,10,3),
+	(11,8,3),(11,5,3),(11,18,3),(11,14,3),(12,15,3);
 
 INSERT INTO `product_menu_type`
 	(`product_menu_id`,`product_type_id`,`surplus`)
@@ -302,26 +302,26 @@ VALUES
 INSERT INTO `supplier`
 	(`name`,`tax_number`,`address`,`description`)
 VALUES
-	("Zoé D. Leclercq","1652021653999","P.O. Box 198, 4594 Ut St.",null),
-	("Agathe Fabre","1629100659699","Ap #766-7613 Mollis. Rd.",null),
-	("Bruno Thomas","1668112632099","P.O. Box 692, 6415 Nam Rd.",null),
-	("Nolan Guillaume","1621012935799","701-1648 Magna. St.",null),
-	("Catherine Arnaud","1669031847199","2058 Cras St.",null),
-	("Simon B. Remy","1647120365999","Ap #616-833 Nibh. Rd.",null),
-	("Clémence P. Roussel","1665051678699","Ap #559-4361 Mauris Avenue",null),
-	("Louis P. Herve","1601020651699","7970 Eros Rd.",null),
-	("Maxime Moreau","1656080974499","P.O. Box 805, 4244 Sagittis Av.",null),
-	("Renaud N. Dumont","1618120890299","P.O. Box 232, 6861 Volutpat Road",null),
-	("Léonie E. Dupont","1655100945099","4667 Et Av.",null),
-	("Clotilde Fernandez","1649041719999","Ap #106-9494 Euismod Road",null),
-	("Elsa Le goff","1643031417299","238-4408 Sit Road",null),
-	("Zacharis Richard","1644040597299","9165 Aenean Rd.",null),
-	("Luna Schmitt","1665021476299","934-7841 Facilisis, St.",null),
-	("Fanny D. Guerin","1688061190199","6580 Eros St.",null),
-	("Constant Y. Prevost","1646062884899","Ap #127-7558 Gravida Ave",null),
-	("Mathieu Weber","1693102892799","257-5732 Mauris Street",null),
-	("Lorenzo O. Robert","1697090267599","5480 Diam Street",null),
-	("Evan Collet","1697051577099","P.O. Box 620, 4785 Ut, St.",null);
+	("Zoé D. Leclercq","1652021","P.O. Box 198, 4594 Ut St.",null),
+	("Agathe Fabre","1629100","Ap #766-7613 Mollis. Rd.",null),
+	("Bruno Thomas","1668112","P.O. Box 692, 6415 Nam Rd.",null),
+	("Nolan Guillaume","1621012","701-1648 Magna. St.",null),
+	("Catherine Arnaud","1669031","2058 Cras St.",null),
+	("Simon B. Remy","1647120","Ap #616-833 Nibh. Rd.",null),
+	("Clémence P. Roussel","1665051","Ap #559-4361 Mauris Avenue",null),
+	("Louis P. Herve","1601020","7970 Eros Rd.",null),
+	("Maxime Moreau","1656080","P.O. Box 805, 4244 Sagittis Av.",null),
+	("Renaud N. Dumont","1618120","P.O. Box 232, 6861 Volutpat Road",null),
+	("Léonie E. Dupont","1655100","4667 Et Av.",null),
+	("Clotilde Fernandez","1649041","Ap #106-9494 Euismod Road",null),
+	("Elsa Le goff","1643031","238-4408 Sit Road",null),
+	("Zacharis Richard","1644040","9165 Aenean Rd.",null),
+	("Luna Schmitt","1665021","934-7841 Facilisis, St.",null),
+	("Fanny D. Guerin","1688061","6580 Eros St.",null),
+	("Constant Y. Prevost","1646062","Ap #127-7558 Gravida Ave",null),
+	("Mathieu Weber","1693102","257-5732 Mauris Street",null),
+	("Lorenzo O. Robert","1697090","5480 Diam Street",null),
+	("Evan Collet","1697051","P.O. Box 620, 4785 Ut, St.",null);
 
 INSERT INTO `supplier_ingredient`
 	(`supplier_id`,`ingredient_id`,`favorite`)

@@ -9,7 +9,7 @@ CREATE TABLE `client` (
   `email` VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
   `mobile_number` VARCHAR(255) NOT NULL,
-  `tax_number` INTEGER NOT NULL,
+  `tax_number` BIGINT NOT NULL,
   `birth_date` DATE
 );
 
@@ -48,7 +48,7 @@ CREATE TABLE `product_type` (
 
 CREATE TABLE `product` (
   `id` INTEGER PRIMARY KEY AUTO_INCREMENT,
-  `sku` INTEGER NOT NULL,
+  `sku` VARCHAR(255) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `brand` VARCHAR(255),
   `expiration_date` DATE NOT NULL,
@@ -142,7 +142,7 @@ CREATE TABLE `employee` (
   `full_name` VARCHAR(255) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
   `mobile_number` VARCHAR(255) NOT NULL,
-  `tax_number` VARCHAR(255) NOT NULL,
+  `tax_number` BIGINT NOT NULL,
   `birth_date` VARCHAR(255) NOT NULL,
   `employee_type_id` INTEGER NOT NULL,
   `restaurant_id` INTEGER NOT NULL,
@@ -182,7 +182,7 @@ CREATE TABLE `order_processing` (
   `employee_id` INTEGER NOT NULL,
   `date` DATE NOT NULL,
   `time` TIME NOT NULL,
-  `notes` VARCHAR(255) NOT NULL,
+  `notes` VARCHAR(255),
   PRIMARY KEY (`client_order_id`, `order_state_id`, `employee_id`)
 );
 
@@ -225,9 +225,9 @@ ALTER TABLE `stock_product` ADD CONSTRAINT `fk_stock_product__restaurant_id` FOR
 CREATE TABLE `supplier` (
   `id` INTEGER PRIMARY KEY AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
-  `tax_number` INTEGER NOT NULL,
+  `tax_number` BIGINT NOT NULL,
   `address` VARCHAR(255) NOT NULL,
-  `description` VARCHAR(255) NOT NULL
+  `description` VARCHAR(255)
 );
 
 CREATE TABLE `supplier_ingredient` (

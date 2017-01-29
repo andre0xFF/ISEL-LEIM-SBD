@@ -68,7 +68,6 @@ public class MySQL {
 			}
 		} catch (Exception e) {
 			return false;
-
 		}
 
 		return true;

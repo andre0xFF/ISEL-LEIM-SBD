@@ -48,12 +48,13 @@ CREATE TABLE `product_type` (
 
 CREATE TABLE `product` (
   `id` INTEGER PRIMARY KEY AUTO_INCREMENT,
-  `sku` VARCHAR(255) NOT NULL,
+  `sku` INTEGER NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `brand` VARCHAR(255),
   `expiration_date` DATE NOT NULL,
   `price` DECIMAL(12, 2) NOT NULL,
-  `product_type_id` INTEGER NOT NULL
+  `product_type_id` INTEGER NOT NULL,
+  `cook` BOOLEAN NOT NULL
 );
 
 CREATE INDEX `idx_product__product_type_id` ON `product` (`product_type_id`);
@@ -63,7 +64,7 @@ ALTER TABLE `product` ADD CONSTRAINT `fk_product__product_type_id` FOREIGN KEY (
 CREATE TABLE `product_ingredient` (
   `product_id` INTEGER NOT NULL,
   `ingredient_id` INTEGER NOT NULL,
-  `quantity` VARCHAR(255) NOT NULL,
+  `quantity` INTEGER NOT NULL,
   PRIMARY KEY (`product_id`, `ingredient_id`)
 );
 
@@ -125,15 +126,15 @@ ALTER TABLE `client_order` ADD CONSTRAINT `fk_client_order__client_id` FOREIGN K
 ALTER TABLE `client_order` ADD CONSTRAINT `fk_client_order__restaurant_id` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurant` (`id`);
 
 CREATE TABLE `client_order_product` (
-  `order_id` INTEGER NOT NULL,
+  `client_order_id` INTEGER NOT NULL,
   `product_id` INTEGER NOT NULL,
   `product_quantity` INTEGER NOT NULL,
-  PRIMARY KEY (`order_id`, `product_id`)
+  PRIMARY KEY (`client_order_id`, `product_id`)
 );
 
 CREATE INDEX `idx_client_order_product__product_id` ON `client_order_product` (`product_id`);
 
-ALTER TABLE `client_order_product` ADD CONSTRAINT `fk_client_order_product__order_id` FOREIGN KEY (`order_id`) REFERENCES `client_order` (`id`);
+ALTER TABLE `client_order_product` ADD CONSTRAINT `fk_client_order_product__order_id` FOREIGN KEY (`client_order_id`) REFERENCES `client_order` (`id`);
 
 ALTER TABLE `client_order_product` ADD CONSTRAINT `fk_client_order_product__product_id` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`);
 
@@ -182,8 +183,8 @@ CREATE TABLE `order_processing` (
   `employee_id` INTEGER NOT NULL,
   `date` DATE NOT NULL,
   `time` TIME NOT NULL,
-  `notes` VARCHAR(255),
-  PRIMARY KEY (`client_order_id`, `order_state_id`, `employee_id`)
+  `notes` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`client_order_id`, `order_state_id`)
 );
 
 CREATE INDEX `idx_order_processing__employee_id` ON `order_processing` (`employee_id`);

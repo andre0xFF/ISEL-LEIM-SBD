@@ -85,15 +85,15 @@ VALUES
 INSERT INTO `ingredient`
 	(`name`)
 VALUES
-	("Onions"),("Pecan nuts"),("Cottage cheese"),("Cottage cheese"),("Pork"),
-	("Pecan nuts"),("Pork"),("Avocados"),("Onions"),("Pork"),("Broccoli"),
-	("Pumpkin"),("Pumpkin seeds"),("Cabbage"),("Radishes"),("Pasta"),
-	("Pumpkin"),("Cabbage"),("Radishes"),("Bread");
+	("Onions"),("Cottage cheese"),("Cheese"),("Pork"),("Red bean"),("Octopus"),("Pecan nut"),("Avocado"),
+	("Onion"),("Broccoli"),("Cod fish"),("Duck"),("Pumpkin"),("Pumpkin seed"),("Cabbage"),("Radishes"),
+	("Pasta"),("Banana"),("Rice"),("Cabbage"),("Bread"),("Ham"),("Spinach"),("Carrot"),("Strawberry"),
+	("Yogurt"),("Chicken"),("Potato");
 
 INSERT INTO `order_state`
 	(`title`)
 VALUES
-	("Accepted"),("Refused"),("In preperation"),("Ready"),("Delivered"),("Paid");
+	("Refused"),("Accepted"),("In preperation"),("Ready"),("Delivered"),("Paid");
 
 INSERT INTO `product_menu`
 	(`weekend`,`open_time`,`close_time`)
@@ -110,55 +110,60 @@ VALUES
 	("Desert");
 
 INSERT INTO `product`
-	(`sku`,`name`,`brand`,`expiration_date`,`price`,`product_type_id`)
+	(`sku`,`name`,`brand`,`expiration_date`,`price`,`product_type_id`,`cook`)
 VALUES
-	("DE8C1884-A393-65D4-9660-F02B1ABDFBAF","Coca-cola zero","Coca-cola","2017-01-20",50,5),
-	("66D6F494-942F-C574-EC0D-42204C1E738A","Coca-cola","Coca-cola","2016-12-19",15,2),
-	("E6CADE0A-FEAE-40DA-60C5-1BAC66B4E06B","7up","7up","2016-12-30",30,1),
-	("615B6D06-246E-E547-B0AF-FE6FFCB8A221","Fanta","Coca-cola","2016-12-15",33,4),
-	("A279A9A1-636C-6D6E-387C-BAD85334EF4F","Sprite","Coca-cola","2017-01-14",50,5),
-	("DBCACCB8-B6EB-175D-951D-72206DFE5AA3","eget","Integer sem","2017-01-28",22,1),
-	("CEFE53BA-65A6-99CA-6206-9A015EB6A9CF","Ham and cheese pizza",null,"2016-12-15",53,5),
-	("18DA7DCD-66DA-14D2-71F8-3BE0DAF4B433","Chicken burrito",null,"2016-12-07",51,3),
-	("197784AE-A4F7-5B7F-34F6-7B6894EEA58D","Spinach soup",null,"2016-12-15",42,6),
-	("C6D8710E-6E32-5793-6122-51BFEB4CBAC9","Carrot soup",null,"2016-12-29",31,1),
-	("B5975B22-A2DD-B475-4227-81928F10ABAC","Monte velho","Herdade do esporao","2017-12-02",23,1),
-	("457D0BDF-9B18-8364-673F-D5511F2DCAB9","Bread",null,"2017-02-21",50,1),
-	("59D99C30-E367-A3BA-8E2D-C5EDA186AAEC","Cod fish a la lagareiro",null,"2017-02-28",27,4),
-	("42018559-8915-C122-6271-853F76BF3162","Bean mix a' transmontana",null,"2017-01-29",8,1),
-	("857EF645-FB2A-9394-54CA-9AA190CC1615","Duck with rice",null,"2017-01-24",6,6),
-	("9BA28C05-3D39-2764-D497-28ACA6413F34","Rice a la cabidela",null,"2016-12-13",46,3),
-	("AB0A9F15-D341-6F87-6F6D-CDDF1177B684","Octopus a la lagareiro",null,"2016-12-28",22,3);
+	("DE8C1884-A393-65D4-9660-F02B1ABDFBAF","Coca-cola zero","Coca-cola","2017-01-20",3,2,false),
+	("66D6F494-942F-C574-EC0D-42204C1E738A","Coca-cola","Coca-cola","2016-12-19",3,2,false),
+	("E6CADE0A-FEAE-40DA-60C5-1BAC66B4E06B","7up","7up","2016-12-30",3,2,false),
+	("615B6D06-246E-E547-B0AF-FE6FFCB8A221","Fanta","Coca-cola","2016-12-15",3,2,false),
+	("A279A9A1-636C-6D6E-387C-BAD85334EF4F","Sprite","Coca-cola","2017-01-14",3,2,false),
+	("DBCACCB8-B6EB-175D-951D-72206DFE5AA3","Pork stew",null,"2017-02-28",14,5,true),
+	("CEFE53BA-65A6-99CA-6206-9A015EB6A9CF","Ham and cheese pizza",null,"2016-12-15",12,5,true),
+	("18DA7DCD-66DA-14D2-71F8-3BE0DAF4B433","Chicken burrito",null,"2016-12-07",10,5,true),
+	("197784AE-A4F7-5B7F-34F6-7B6894EEA58D","Spinach soup",null,"2016-12-15",5,4,true),
+	("C6D8710E-6E32-5793-6122-51BFEB4CBAC9","Carrot soup",null,"2016-12-29",5,4,true),
+	("B5975B22-A2DD-B475-4227-81928F10ABAC","Monte velho","Herdade do esporao","2017-12-02",15,1,false),
+	("457D0BDF-9B18-8364-673F-D5511F2DCAB9","Bread",null,"2017-02-21",3,4,false),
+	("59D99C30-E367-A3BA-8E2D-C5EDA186AAEC","Cod fish a la lagareiro",null,"2017-02-28",14,5,true),
+	("42018559-8915-C122-6271-853F76BF3162","Bean mix a' transmontana",null,"2017-01-29",14,5,true),
+	("857EF645-FB2A-9394-54CA-9AA190CC1615","Duck with rice",null,"2017-01-24",14,5,true),
+	("9BA28C05-3D39-2764-D497-28ACA6413F34","Rice a la cabidela",null,"2016-12-13",14,5,true),
+	("AB0A9F15-D341-6F87-6F6D-CDDF1177B684","Octopus a la lagareiro",null,"2016-12-28",14,5,true),
+	("AB0A9F15-D341-6F87-6F6D-CDDF1177B684","Banana ice cream",null,"2016-12-28",4,6,true),
+	("AB0A9F15-D341-6F87-6F6D-CDDF1177B684","Strawberry ice cream",null,"2016-12-28",4,6,true),
+	("AB0A9F15-D341-6F87-6F6D-CDDF1177B684","Froyo",null,"2016-12-28",4,6,true);
 
 INSERT INTO `product_ingredient`
 	(`product_id`,`ingredient_id`,`quantity`)
 VALUES
-	(7,1,10),(7,2,3),(7,3,3),(7,4,3),(8,1,3),(8,2,3),(8,10,3),(8,20,3),(9,20,3),
-	(9,3,3),(9,7,3),(9,15,3),(10,15,3),(10,12,3),(10,11,3),(10,10,3),(11,10,3),
-	(11,8,3),(11,5,3),(11,18,3),(11,14,3),(12,15,3);
+	(6,4,6),(6,1,6),(6,19,7),(7,21,10),(7,2,10),(7,3,10),(8,22,3),(8,19,5),
+	(9,23,10),(9,10,1),(9,15,2),(9,24,2),(10,24,10),(13,11,3),(13,28,7),(14,5,20),
+	(14,19,4),(15,12,3),(15,19,5),(16,19,5),(16,24,4),(17,6,2),(17,19,4),(17,9,5),
+	(18,18,3),(18,26,2),(19,25,4),(19,26,2),(20,25,4);
 
 INSERT INTO `product_menu_type`
 	(`product_menu_id`,`product_type_id`,`surplus`)
 VALUES
-	(1,1,0.10),(2,1,0.10),(3,1,0.15),(4,1,0.20),(1,2,0.10),
-	(2,2,0.10),(3,2,0.15),(4,2,0.15),(1,3,0.10),(2,3,0.10),
-	(3,3,0.15),(4,3,0.15),(1,4,0.10),(2,4,0.15),(3,4,0.15),
-	(4,4,0.15),(1,5,0.10),(2,5,0.15),(3,5,0.15),(4,5,0.25),
+	(1,1,0.10),(2,1,0.10),(3,1,0.15),(4,1,0.20),
+	(1,2,0.10),(2,2,0.10),(3,2,0.15),(4,2,0.15),
+	(1,3,0.10),(2,3,0.10),(3,3,0.15),(4,3,0.15),
+	(1,4,0.10),(2,4,0.15),(3,4,0.15),(4,4,0.15),
+	(1,5,0.10),(2,5,0.15),(3,5,0.15),(4,5,0.25),
 	(1,6,0.10),(2,6,0.15),(3,6,0.15),(4,6,0.25);
 
 INSERT INTO `product_recipe`
 	(`product_id`,`name`,`file_path`)
 VALUES
-	(7,"Don Carlos","dom_carlos.xml"),
+	(6,"A la Lucca","pizza_lucca.xml"),
 	(8,"Azenhaga","azenhaga.xml"),
-	(7,"transmontana","transmontana.xml");
+	(7,"Miss Gloria","spinach_soup_gloria.xml");
 
-	INSERT INTO `restaurant`
-		(`name`,`email`,`address`,`postcode`,`city`,`country`,`coordinates`,`denomination`,`logo`)
-	VALUES
-		("Alaquim","mail@alaquim.com","Ap #475-5837 Nec Avenue","1501","Latera","Kiribati","-69.25019,26.17757","ipsum. Phasellus","alaquim.png"),
-		("Izbiz","mail@izbiz.com","P.O. Box 975,9388 Quisque Rd.","04997","Pointe-Claire","Hong Kong","66.90958,-61.14352","adipiscing","izbiz.png"),
-		("Alaquim II,","mail@alaquimii.com","P.O. Box 894,2188 Est Ave","31305","Vorst","Faroe Islands","-50.11271,-33.36246","ornare","alaquim.png");
+INSERT INTO `restaurant`
+	(`name`,`email`,`address`,`postcode`,`city`,`country`,`coordinates`,`denomination`,`logo`)
+VALUES
+	("Alaquim","mail@alaquim.com","Ap #475-5837 Nec Avenue","1501","Latera","Kiribati","-69.25019,26.17757","ipsum. Phasellus","alaquim.png"),
+	("Izbiz","mail@izbiz.com","P.O. Box 975,9388 Quisque Rd.","04997","Pointe-Claire","Hong Kong","66.90958,-61.14352","adipiscing","izbiz.png"),
+	("Alaquim II,","mail@alaquimii.com","P.O. Box 894,2188 Est Ave","31305","Vorst","Faroe Islands","-50.11271,-33.36246","ornare","alaquim.png");
 
 INSERT INTO `client_order`
 	(`client_id`,`restaurant_id`)
@@ -168,9 +173,9 @@ VALUES
 	(1,3),(2,3),(3,3),(4,3),(5,3),(6,3),(7,3),(8,3),(9,3),(10,3);
 
 INSERT INTO `client_order_product`
-	(`order_id`,`product_id`,`product_quantity`)
+	(`client_order_id`,`product_id`,`product_quantity`)
 VALUES
-	(1,11,9),(1,1,6),(2,11,6),(2,15,1),(3,2,7),(3,3,10),(4,2,8),(4,3,1),
+	(1,11,3),(1,1,6),(2,11,6),(2,15,1),(3,2,7),(3,3,10),(4,2,8),(4,3,1),
 	(5,6,8),(5,10,8),(6,4,7),(6,9,4),(7,15,6),(7,2,5),(7,11,2),(8,10,3),
 	(9,1,4),(9,5,2),(9,11,7),(10,13,3),(10,3,4),(11,2,3),(11,10,3),(11,1,1),
 	(12,13,3),(12,9,4),(13,6,3),(14,12,5),(14,17,5),(15,2,8),(16,9,5),
@@ -250,34 +255,36 @@ VALUES
 INSERT INTO `order_processing`
 	(`client_order_id`,`order_state_id`,`employee_id`,`date`,`time`,`notes`)
 VALUES
-	(1,1,1,"2016-12-03","13:00:00",null),
-	(1,3,1,"2016-12-03","13:20:00",null),
-	(1,4,1,"2016-12-03","13:30:00",null),
-	(1,5,1,"2016-12-03","13:40:00",null),
-	(1,6,1,"2016-12-03","13:50:00",null),
-	(2,1,1,"2016-12-03","13:00:00",null),
-	(2,3,1,"2016-12-03","13:20:00",null),
-	(2,4,1,"2016-12-03","13:30:00",null),
-	(2,5,1,"2016-12-03","13:40:00",null),
-	(2,6,1,"2016-12-03","13:50:00",null),
-	(3,1,1,"2016-12-03","13:00:00",null),
-	(3,3,1,"2016-12-03","13:20:00",null),
-	(3,4,1,"2016-12-03","13:30:00",null),
-	(3,5,1,"2016-12-03","13:40:00",null),
-	(3,6,1,"2016-12-03","13:50:00",null),
-	-- Orders that are ready to be delivered
-	(4,1,2,"2017-01-19","13:00:00",null),
-	(4,3,2,"2017-01-19","13:10:00",null),
-	(4,4,2,"2017-01-19","13:15:00",null),
-	(5,1,2,"2017-01-19","13:00:00",null),
-	(5,3,2,"2017-01-19","13:10:00",null),
-	(5,4,2,"2017-01-19","13:15:00",null),
-	(6,1,2,"2017-01-19","13:00:00",null),
-	(6,3,2,"2017-01-19","13:10:00",null),
-	(6,4,2,"2017-01-19","13:15:00",null),
-	(7,1,2,"2017-01-19","13:00:00",null),
-	(7,3,2,"2017-01-19","13:10:00",null),
-	(7,4,2,"2017-01-19","13:15:00",null);
+	(1,2,1,CURDATE(),"13:00:00",null),(1,3,2,CURDATE(),"13:03:00",null),(1,4,1,CURDATE(),"13:11:22",null),(1,5,4,CURDATE(),"13:18:22",null),(1,6,1,CURDATE(),"13:20:22",null),
+	(2,2,1,CURDATE(),"13:00:00",null),
+	(3,2,1,CURDATE(),"13:00:00",null),(3,3,2,CURDATE(),"13:03:00",null),(3,4,3,CURDATE(),"13:11:22",null),(3,5,7,CURDATE(),"13:18:22",null),(3,6,4,CURDATE(),"13:20:22",null),
+	(4,2,1,CURDATE(),"13:00:00",null),
+	(5,2,1,CURDATE(),"13:00:00",null),
+	(6,2,3,CURDATE(),"13:00:00",null),(6,3,4,CURDATE(),"13:03:00",null),(6,4,9,CURDATE(),"13:11:22",null),(6,5,9,CURDATE(),"13:18:22",null),(6,6,1,CURDATE(),"13:20:22",null),
+	(7,2,3,CURDATE(),"13:00:00",null),(7,3,1,CURDATE(),"13:03:00",null),(7,4,9,CURDATE(),"13:11:22",null),(7,5,1,CURDATE(),"13:18:22",null),(7,6,1,CURDATE(),"13:20:22",null),
+	(8,2,1,CURDATE(),"13:00:00",null),
+	(9,2,1,CURDATE(),"13:00:00",null),(9,3,1,CURDATE(),"13:03:00",null),(9,4,1,CURDATE(),"13:11:22",null),(9,5,1,CURDATE(),"13:18:22",null),(9,6,1,CURDATE(),"13:20:22",null),
+	(10,2,4,CURDATE(),"13:00:00",null),(10,3,5,CURDATE(),"13:03:00",null),(10,4,3,CURDATE(),"13:11:22",null),(10,5,9,CURDATE(),"13:18:22",null),(10,6,1,CURDATE(),"13:20:22",null),
+	(11,2,4,CURDATE(),"13:00:00",null),
+	(12,2,4,CURDATE(),"13:00:00",null),
+	(13,2,5,CURDATE(),"13:00:00",null),(13,3,4,CURDATE(),"13:03:00",null),(13,4,4,CURDATE(),"13:11:22",null),(13,5,1,CURDATE(),"13:18:22",null),(13,6,1,CURDATE(),"13:20:22",null),
+	(14,2,5,CURDATE(),"13:00:00",null),(14,3,3,CURDATE(),"13:03:00",null),(14,4,4,CURDATE(),"13:11:22",null),(14,5,1,CURDATE(),"13:18:22",null),(14,6,1,CURDATE(),"13:20:22",null),
+	(15,2,5,CURDATE(),"13:00:00",null),(15,3,3,CURDATE(),"13:03:00",null),(15,4,6,CURDATE(),"13:11:22",null),(15,5,1,CURDATE(),"13:18:22",null),(15,6,1,CURDATE(),"13:20:22",null),
+	(16,2,6,CURDATE(),"13:00:00",null),(16,3,2,CURDATE(),"13:03:00",null),(16,4,6,CURDATE(),"13:11:22",null),(16,5,9,CURDATE(),"13:18:22",null),(16,6,1,CURDATE(),"13:20:22",null),
+	(17,2,6,CURDATE(),"13:00:00",null),(17,3,2,CURDATE(),"13:03:00",null),(17,4,4,CURDATE(),"13:11:22",null),(17,5,9,CURDATE(),"13:18:22",null),(17,6,1,CURDATE(),"13:20:22",null),
+	(18,2,7,CURDATE(),"13:00:00",null),(18,3,5,CURDATE(),"13:03:00",null),(18,4,4,CURDATE(),"13:11:22",null),(18,5,9,CURDATE(),"13:18:22",null),(18,6,1,CURDATE(),"13:20:22",null),
+	(19,2,7,CURDATE(),"13:00:00",null),(19,3,5,CURDATE(),"13:03:00",null),(19,4,2,CURDATE(),"13:11:22",null),(19,5,1,CURDATE(),"13:18:22",null),(19,6,1,CURDATE(),"13:20:22",null),
+	(20,2,4,CURDATE(),"13:00:00",null),
+	(21,2,4,CURDATE(),"13:00:00",null),
+	(22,2,3,CURDATE(),"13:00:00",null),
+	(23,2,3,CURDATE(),"13:00:00",null),
+	(24,2,6,CURDATE(),"13:00:00",null),(24,3,4,CURDATE(),"13:03:00",null),(24,4,5,CURDATE(),"13:11:22",null),
+	(25,2,6,CURDATE(),"13:00:00",null),(25,3,2,CURDATE(),"13:03:00",null),(25,4,5,CURDATE(),"13:11:22",null),
+	(26,2,4,CURDATE(),"13:00:00",null),(26,3,2,CURDATE(),"13:03:00",null),(26,4,5,CURDATE(),"13:11:22",null),
+	(27,2,4,CURDATE(),"13:00:00",null),(27,3,4,CURDATE(),"13:03:00",null),(27,4,1,CURDATE(),"13:11:22",null),
+	(28,2,4,CURDATE(),"13:00:00",null),(28,3,4,CURDATE(),"13:03:00",null),(28,4,1,CURDATE(),"13:11:22",null),
+	(29,2,1,CURDATE(),"13:00:00",null),
+	(30,2,1,CURDATE(),"13:00:00",null),(30,3,1,CURDATE(),"13:03:00",null);
 
 INSERT INTO `stock_ingredient`
 	(`restaurant_id`,`ingredient_id`,`quantity`)
@@ -292,12 +299,12 @@ VALUES
 INSERT INTO `stock_product`
 	(`restaurant_id`,`product_id`,`quantity`)
 VALUES
-	(1,1,100),(1,9,100),(1,2,100),(1,3,100),(1,4,100),
-	(1,5,100),(1,6,100),(1,7,100),(1,8,100),
-	(2,1,0),(2,9,0),(2,2,0),(2,3,0),(2,4,0),
-	(2,5,0),(2,6,0),(2,7,0),(2,8,0),
-	(3,1,10),(3,9,10),(3,2,10),(3,3,10),(3,4,10),
-	(3,5,10),(3,6,10),(3,7,10),(3,8,10);
+	(1,1,100),(1,2,100),(1,3,100),(1,4,100),(1,5,100),(1,6,100),(1,7,100),(1,8,100),
+	(1,9,100),(1,10,100),(1,11,100),(1,12,100),(1,13,100),(1,14,100),(1,15,100),(1,16,100),(1,17,100),
+	(2,1,100),(2,2,100),(2,3,100),(2,4,100),(2,5,100),(2,6,100),(2,7,100),(2,8,100),
+	(2,9,100),(2,10,100),(2,11,100),(2,12,100),(2,13,100),(2,14,100),(2,15,100),(2,16,100),(2,17,100),
+	(3,1,100),(3,2,100),(3,3,100),(3,4,100),(3,5,100),(3,6,100),(3,7,100),(3,8,100),
+	(3,9,100),(3,10,100),(3,11,100),(3,12,100),(3,13,100),(3,14,100),(3,15,100),(3,16,100),(3,17,100);
 
 INSERT INTO `supplier`
 	(`name`,`tax_number`,`address`,`description`)

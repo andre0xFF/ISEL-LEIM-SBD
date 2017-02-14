@@ -34,7 +34,7 @@ public class Bot {
 			this.user = profiles[idx];
 
 			try {
-				Output.write(String.format("%s %s\n", this.user.get_greeting(), Output.get_welcome_profile()));
+				Output.write(String.format("%s, %s\n", this.user.get_greeting(), Output.get_welcome_profile()));
 				this.user.run();
 				Thread.sleep(3500);
 
@@ -70,145 +70,7 @@ interface Menu {
 	}
 }
 
-interface IO {
 
-	public static String random_option(String[] options) {
-		return options[new Random().nextInt(options.length)];
-	}
-
-	public static int find_option_idx(String[] options, String input) {
-
-		for (int i = 0; i < options.length; i++) {
-			if (IO.find_option(options[i], input)) {
-				return i;
-			}
-		}
-
-		return -1;
-	}
-
-	public static boolean find_option(String[] options, String input) {
-
-		return (IO.find_option_idx(options, input) > -1);
-	}
-
-	public static boolean find_option(String option, String input) {
-
-		option = option.toLowerCase();
-		input = input.toLowerCase();
-
-		return (input.contains(option) || option.contains(input));
-	}
-}
-
-class Input implements IO {
-
-	public final static String[] logout = {
-		"Bye",
-		"Logout",
-		"Exit",
-		"Adious",
-		"Cya",
-
-		"Adeus"
-	};
-
-	public static String read() {
-		@SuppressWarnings("resource")
-		Scanner scanner = new Scanner(System.in);
-		String input;
-
-		System.out.printf("\n> ");
-		input = scanner.nextLine();
-		System.out.printf("\n");
-		return input;
-	}
-
-	public static int get_user_option(String[] options) {
-		String in = Input.read();
-
-		// check if the user wants to logout
-		if (IO.find_option(Input.logout, in)) {
-			return -2;
-		}
-
-		// check what option the user has chosen
-		int idx = -1;
-
-		try {
-			// is it a number?
-			int aux = Integer.parseInt(in.substring(0, 1));
-
-			if (aux >= 0 && aux <= options.length) {
-				idx = aux - 1;
-			}
-
-		} catch (NumberFormatException nfe) {
-			// maybe its a profile description
-			idx = IO.find_option_idx(options, in);
-		}
-
-		if (idx == -1) {
-			Output.write(IO.random_option(Output.unknown));
-			return get_user_option(options);
-		}
-
-		return idx;
-	}
-}
-
-class Output implements IO {
-
-	public final static String[] welcome = {
-		"Welcome! I'm the restaurant assistant. Who are you?",
-		"I am known by many names, but you may call me... Tim. - Graham Chapman\n\nSo, who are you?",
-		"Great, the digital pimp hard at work. - Switch, in The Matrix",
-		"I am the one!",
-		"Whoa! Who are you?",
-		"If real is what you can feel, smell, taste and see, then 'real' is simply electrical signals interpreted by your brain. - Morpheus in The Matrix\n\nWhat's your input?",
-		"My name...... is Neo! And if you are not Agent Smith, then who are you?",
-		"You say freak, I say unique. - Christian Baloga",
-		"People think that I must be a very strange person. This is not correct. I have the heart of a small boy. It is in a glass jar on my desk. - Stephen King",
-		"So how do you plan on saving the world?” — Cooper\n\nWe’re not meant to save the world, we’re meant to leave it.” — Brand in Interstellar\n\n"
-	};
-
-	public final static String[] welcome_profile = {
-		"What can I do for you?",
-		"How many I help you?",
-		"At votre service! (french)"
-	};
-
-	public final static String[] unknown = {
-		"I'm sorry I didn't get that. Can you repeat?",
-		"Pardon?",
-		"Comando desconhecido.",
-		"Did you misspell something?",
-		"I'm not sure what you mean.. Write a command or the command option."
-	};
-
-	public final static String[] stranger = {
-		"There is something fishy..",
-		"Do I know you?",
-		"Wait.. who?",
-		"I don't recognize your bytecode."
-	};
-
-	public static String get_welcome() { return IO.random_option(Output.welcome); }
-	public static String get_welcome_profile() { return IO.random_option(Output.welcome_profile); }
-
-	public static void write(String s) {
-		System.out.printf("%s\n", s);
-	}
-
-	public static void write(int i) {
-		Output.write(String.valueOf(i));
-	}
-
-	public static void clear_screen() {
-
-		System.out.print("\033[H\033[2J");
-	}
-}
 
 interface Client_model {
 
@@ -352,10 +214,12 @@ class Owner implements Profile, Menu {
 class Waitress implements Profile, Menu {
 
 	private SBD db;
+	private int[] orders = new int[0];
 	public final String PROFILE_NAME = "Waitress";
 	public final String GREETING = "Hi there!";
 	public final String[] MENU_OPTIONS = {
-		"View orders that are ready"
+		"View orders that are ready",
+		"Deliver an order"
 	};
 
 	@Override
@@ -371,6 +235,7 @@ class Waitress implements Profile, Menu {
 
 	@Override
 	public void run() throws SQLException {
+		this.load_orders();
 		int idx = -1;
 
 		while (true) {
@@ -381,17 +246,47 @@ class Waitress implements Profile, Menu {
 			if (idx == -2) { return; }
 
 			if (idx == 0) { this.write_ready_orders(); }
+			if (idx == 1) { this.deliver_order(); }
 		}
+	}
+	
+	private void load_orders() throws SQLException {
+			
+		ResultSet rs = db.get_ready_orders();
+		rs.last();
+		this.orders = new int[rs.getRow() - 1];
+		rs.beforeFirst();
+		
+		for (int i = 0; i < this.orders.length && rs.next(); i++) {
+			this.orders[i] = rs.getInt("client_order_id");
+		}
+		
+		rs.close();
 	}
 
 	private void write_ready_orders() throws SQLException {
-
-		try {
-			String r = db.get_ready_orders();
-		} catch (No_orders_found e) {
-			Output.write(e.getMessage());
+		
+		this.load_orders();
+		
+		if (this.orders.length > 0) {
+			Output.write(String.format("%-12s", "Orders ready"));
+			for (int i = 0; i < this.orders.length; i++) {
+				Output.write(String.format("%-12s", this.orders[i]));
+			}	
 		}
-
+		else {
+			Output.write("There are no orders ready.");
+		}
+		
+		Output.write("\n");
+	}
+	
+	private void deliver_order() {
+		
+		Output.write("Which order?");
+		int order = Input.get_user_option(this.orders);
+		
+		System.out.println(this.orders[order]);
 	}
 
 }

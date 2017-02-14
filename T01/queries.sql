@@ -6,6 +6,8 @@ SET @param = '';
 CALL count_last_name("Almeida", @param);
 SELECT @param;
 
+CALL get_ready_orders('2017-01-30', 'Ready');
+
 USE sbd;
 
 SELECT name, price FROM Product JOIN Product_type ON Product.product_type_id = Product_type.id
@@ -116,4 +118,19 @@ FROM
     client_order ON order_processing.client_order_id = client_order.id
 WHERE
     client_order.restaurant_id = 1
-ORDER BY order_processing.client_order_id , order_processing.order_state_id ASC
+ORDER BY order_processing.client_order_id , order_processing.order_state_id ASC;
+
+-- Increment order state
+SELECT @order_state := MAX(order_state_id) FROM order_processing WHERE client_order_id = 30;
+SELECT @max_order_state := MAX(id) FROM order_state;
+
+
+INSERT INTO `order_processing`
+	(`client_order_id`,`order_state_id`,`employee_id`,`date`,`time`)
+VALUES
+	(30, @order_state + 1, 1, curdate(), curtime());
+    
+SELECT * FROM order_processing;
+
+CALL order_next_state(29, 1);
+    

@@ -11,10 +11,10 @@ import database.MySQL;
 public class SBD implements SBD_DAO {
 
 
-	Connection conn = MySQL.get_connection();
-	int restaurant_id;
-	int client_id;
-	int employee_id;
+	private Connection conn = MySQL.get_connection();
+	private int restaurant_id;
+	private int client_id;
+	private int employee_id;
 
 	public SBD(int restaurant_id) throws SQLException {
 		this.restaurant_id = restaurant_id;
@@ -25,15 +25,19 @@ public class SBD implements SBD_DAO {
 	}
 
 	public String get_owner() throws SQLException, User_not_found {
-		String owner = "";
-		
-		CallableStatement cstmt = this.conn.prepareCall(SBD_DAO.GET_OWNER_SP);
-		cstmt.setInt(SBD_DAO.GET_OWNER_IN_PARAM[0], this.restaurant_id);
+		String sp = "{CALL get_owner(?)}";
+		String[] in = { "in_restaurant_id" };
+		String[] out = { "full_name" };
+
+		CallableStatement cstmt = this.conn.prepareCall(sp);
+		cstmt.setInt(in[0], this.restaurant_id);
 		cstmt.execute();
 
 		ResultSet rs = cstmt.getResultSet();
 		rs.next();
 		
+		String owner = rs.getString(out[0]);
+
 		rs.close();
 		cstmt.close();
 
@@ -41,23 +45,22 @@ public class SBD implements SBD_DAO {
 	}
 
 	@Override
-	public String get_ready_orders() throws SQLException, No_orders_found {
-		String orders = "";
-		
-		CallableStatement cstmt = this.conn.prepareCall(SBD_DAO.GET_READY_ORDERS_SP);
+	public ResultSet get_ready_orders() throws SQLException {
+		String sp = "{CALL get_orders_with_state(?, ?)}";
+		String[] in = { "in_date", "in_order_state" };
+		String[] out = { "client_order_id", "employee_id" };
+
+		CallableStatement cstmt = this.conn.prepareCall(sp);
 		java.sql.Date now = new java.sql.Date(new java.util.Date().getTime());
-		cstmt.setDate(SBD_DAO.GET_READY_ORDERS_IN_PARAM[0], now);
-		cstmt.setString(SBD_DAO.GET_READY_ORDERS_IN_PARAM[1], "Ready");
+		now = java.sql.Date.valueOf("2017-01-30");
+		cstmt.setDate(in[0], now);
+		cstmt.setString(in[1], "Ready");
 
 		cstmt.execute();
 
 		ResultSet rs = cstmt.getResultSet();
-		rs.next();
-		
-		rs.close();
-		cstmt.close();
 
-		return orders;
+		return rs;
 	}
 
 	@Override
@@ -161,14 +164,6 @@ public class SBD implements SBD_DAO {
 
 interface SBD_DAO {
 
-	public final static String GET_OWNER_SP = "{CALL get_owner(?)}";
-	public final static String[] GET_OWNER_IN_PARAM = { "in_restaurant_id" };
-	public final static String[] GET_OWNER_OUT_PARAM = { "id", "full_name" };
-
-	public final static String GET_READY_ORDERS_SP = "{CALL get_ready_orders(?, ?)}";
-	public final static String[] GET_READY_ORDERS_IN_PARAM = { "in_date", "in_order_state" };
-	public final static String[] GET_READY_ORDERS_OUT_PARAM = { "client_order_id", "employee_id" };
-
 	public boolean register_order(int order_id, int client_id, int restaurant_id);
 	public boolean next_state(int order_id, int employee_id);
 	public boolean add_client(String full_name, String email, String password, String mobile_number, int tax_number, Date birth_date);
@@ -185,7 +180,7 @@ interface SBD_DAO {
 	public String get_available_ingredients();
 	public String get_orders(Date date);
 	public String get_all_suppliers();
-	public String get_ready_orders() throws SQLException, No_orders_found;
+	public ResultSet get_ready_orders() throws SQLException;
 }
 
 @SuppressWarnings("serial")

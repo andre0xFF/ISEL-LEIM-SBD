@@ -17,12 +17,13 @@ DROP procedure IF EXISTS `get_orders_by_state`;
 
 DELIMITER $$
 USE `sbd`$$
-CREATE PROCEDURE `get_orders_by_state` (IN in_date date, IN in_order_state varchar(15))
+CREATE PROCEDURE `get_orders_by_state` (IN in_date date, IN in_order_state varchar(15), IN in_restaurant_id INTEGER)
 BEGIN
     SELECT client_order_id, order_state.title, employee_id, date, time FROM order_processing
 	JOIN order_state ON order_processing.order_state_id = order_state.id
+    JOIN client_order ON order_processing.client_order_id = client_order.id
 
-	WHERE date = in_date
+	WHERE date = in_date AND client_order.restaurant_id = in_restaurant_id
 	GROUP BY client_order_id
 
 	HAVING MAX(order_processing.order_state_id) = (SELECT order_state.id FROM order_state WHERE order_state.title = in_order_state)
@@ -38,18 +39,22 @@ DELIMITER $$
 USE `sbd`$$
 CREATE PROCEDURE `order_next_state` (
 	IN in_client_order_id integer,
-	IN employee_id integer
+	IN in_employee_id integer
 )
 BEGIN
-	SELECT @order_state := MAX(order_state_id) FROM order_processing WHERE client_order_id = in_client_order_id;
-	SELECT @max_order_state := MAX(id) FROM order_state;
+	SET @order_state := (SELECT MAX(order_state_id) FROM order_processing WHERE client_order_id = in_client_order_id);
+	SET @max_order_state := (SELECT MAX(id) FROM order_state);
+    SET @order_id := (SELECT client_order_id FROM order_processing WHERE client_order_id = in_client_order_id LIMIT 1);
 
-    IF @max_order_state > @order_state THEN
+    IF @order_id > 0 AND @max_order_state > @order_state THEN
 		INSERT INTO `order_processing`
 			(`client_order_id`,`order_state_id`,`employee_id`,`date`,`time`)
 		VALUES
-			(in_client_order_id, @order_state + 1, employee_id, curdate(), curtime());
+			(in_client_order_id, @order_state + 1, in_employee_id, curdate(), curtime());
 	END IF;
+    
+	SELECT client_order_id FROM order_processing
+	WHERE client_order_id = in_client_order_id AND order_state_id = @order_state + 1;
 END$$
 
 DELIMITER ;
@@ -66,6 +71,7 @@ BEGIN
 	SELECT
 		order_processing.client_order_id AS 'Order #',
 		order_state.title AS 'Product state',
+        order_processing.date,
 		order_processing.time,
 		employee.full_name AS 'Employee'
 	FROM
@@ -243,6 +249,21 @@ BEGIN
 	WHERE client_order.id = in_client_id AND date = in_date
 	ORDER BY order_state.id DESC
 	LIMIT 1;
+END$$
+
+DELIMITER ;
+
+-- Get employee
+USE `sbd`;
+DROP procedure IF EXISTS `get_employee`;
+
+DELIMITER $$
+USE `sbd`$$
+CREATE PROCEDURE `get_employee` (IN in_email varchar(40))
+BEGIN
+	SELECT employee.id, employee_type.title, full_name, email, mobile_number, tax_number, birth_date FROM employee
+    JOIN employee_type ON employee_type.id = employee.employee_type_id
+    WHERE employee.email = in_email;
 END$$
 
 DELIMITER ;

@@ -134,11 +134,15 @@ SELECT @order_state := MAX(order_state_id) FROM order_processing WHERE client_or
 SELECT @max_order_state := MAX(id) FROM order_state;
 
 
-INSERT INTO `order_processing`
-	(`client_order_id`,`order_state_id`,`employee_id`,`date`,`time`)
-VALUES
-	(30, @order_state + 1, 1, curdate(), curtime());
-    
-SELECT * FROM order_processing;
+SELECT
+	ingredient.name, stock_ingredient.quantity
+FROM
+	ingredient
+		JOIN
+	stock_ingredient ON ingredient.id = stock_ingredient.ingredient_id
+WHERE
+	stock_ingredient.restaurant_id = 1
+ORDER BY stock_ingredient.quantity DESC;
+
 
     

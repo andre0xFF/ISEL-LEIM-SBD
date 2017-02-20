@@ -51,7 +51,7 @@ public class Bot {
 
 interface Profile {
 
-	public void run() throws SQLException;
+	public void run() throws SQLException, User_not_found;
 	public String get_profile_name();
 	public String get_greeting() throws User_not_found, SQLException;
 }
@@ -133,8 +133,9 @@ class Chef implements Profile, Menu {
 	public final String GREETING = "Bonjour chef!";
 	public final String[] MENU_OPTIONS = {
 		"View current orders",
-		"Manage orders"
+		"Advance an order"
 	};
+	private int id;
 
 	@Override
 	public String[] get_menu_options() { return this.MENU_OPTIONS; }
@@ -149,7 +150,9 @@ class Chef implements Profile, Menu {
 	}
 
 	@Override
-	public void run() {
+	public void run() throws SQLException, User_not_found {
+		this.ask_who();
+		
 		int idx = -1;
 
 		while (true) {
@@ -158,7 +161,44 @@ class Chef implements Profile, Menu {
 			idx = Input.get_user_option(MENU_OPTIONS);
 
 			if (idx == -2) { return; }
+			
+			if (idx == 0) { this.write_orders(); }
+			if (idx == 1) { this.advance_order(); }
 
+		}
+	}
+	
+	private void ask_who() throws SQLException, User_not_found {
+		Output.write("What's your email?");
+		String email = Input.read();
+		this.id = db.get_employee_id(email);
+	}
+	
+	private void write_orders() throws SQLException {
+		String orders;
+		
+		try {
+			java.sql.Date date = new java.sql.Date(new java.util.Date().getTime());
+			Output.write("Orders accepted:");
+			orders = db.get_orders(date, "Accepted");
+			Output.write(orders);
+			Output.write("Orders in preparation:");
+			orders = db.get_orders(date, "In preperation");
+			Output.write(orders);
+		} catch (SQL_invalid_results e) {
+			Output.write(e.getMessage());
+		}
+	}
+	
+	private void advance_order() throws SQLException {
+		Output.write("Which order?");
+		
+		try {
+			String order = Input.read();
+			
+			db.next_state(order, String.valueOf(this.id));
+		} catch (SQL_invalid_results e) {
+			Output.write(e.getMessage());
 		}
 	}
 }
@@ -170,13 +210,14 @@ class Owner implements Profile, Menu {
 	public final String GREETING = "Hello";
 	public final String[] MENU_OPTIONS = {
 		"View ingredients and their stock",
-		"View suppliers and make orders",
+//		"View suppliers and make orders",
 		"Show three most sold items of the week",
-		"Show three most profitable item of the week",
-		"Show items by average preparation time",
+		"Show three most profitable item of the month",
+//		"Show items by average preparation time",
 		"Show clients sorted by amount spent",
-		"Check item details"
+		"Check order details"
 	};
+	private int id;
 
 	@Override
 	public String[] get_menu_options() { return this.MENU_OPTIONS; }
@@ -197,7 +238,8 @@ class Owner implements Profile, Menu {
 	}
 
 	@Override
-	public void run() {
+	public void run() throws SQLException, User_not_found {
+		
 		int idx = -1;
 
 		while (true) {
@@ -206,21 +248,91 @@ class Owner implements Profile, Menu {
 			idx = Input.get_user_option(MENU_OPTIONS);
 
 			if (idx == -2) { return; }
-
+			if (idx == 0) { this.write_ingredients(); }
+			if (idx == 1) { this.write_most_sold(); }
+			if (idx == 2) { this.write_most_profitable(); }
+			if (idx == 3) { this.write_clients_amount_spent(); }
+			if (idx == 4) { this.check_order(); }
 		}
 	}
+	
+	private void check_order() throws SQLException {
+		Output.write("Which order?");
+		
+		try {
+			String order = Input.read();
+			String details = db.get_order_details(order);
+			Output.write(details);
+		} catch (SQL_invalid_results e) {
+			Output.write(e.getMessage());
+		}
+	}
+	private void write_clients_amount_spent() throws SQLException {		
+		try {
+			java.sql.Date date = new java.sql.Date(new java.util.Date().getTime());
+			Output.write("Clients by this trimester:\n");
+			String details = db.get_clients_reveneu(date);
+			Output.write(details);
+		} catch (SQL_invalid_results e) {
+			Output.write(e.getMessage());
+		}	
+	}
+	private void write_avg_time() throws SQLException {
+		try {
+			Output.write("Products average time:\n");
+			String details = db.get_products_by_avg_time();
+			Output.write(details);
+		} catch (SQL_invalid_results e) {
+			Output.write(e.getMessage());
+		}
+	}
+	private void write_most_profitable() throws SQLException {
+		try {
+			java.sql.Date date = new java.sql.Date(new java.util.Date().getTime());
+			Output.write("Most profitable products of this month:\n");
+			String details = db.get_most_profitable_products_by_month(date);
+			Output.write(details);
+		} catch (SQL_invalid_results e) {
+			Output.write(e.getMessage());
+		}
+	}
+	private void write_most_sold() throws SQLException {
+		try {
+			java.sql.Date date = new java.sql.Date(new java.util.Date().getTime());
+			Output.write("Most profitable products of this month:\n");
+			String details = db.get_most_sold_products_by_week(date);
+			Output.write(details);
+		} catch (SQL_invalid_results e) {
+			Output.write(e.getMessage());
+		}
+	}
+	private void write_ingredients() throws SQLException, User_not_found {
+		try {
+			Output.write("Ingredients stock:\n");
+			String details = db.get_available_ingredients();
+			Output.write(details);
+		} catch (SQL_invalid_results e) {
+			Output.write(e.getMessage());
+		}
+	}
+	private void ask_who() throws SQLException, User_not_found {
+		Output.write("What's your email?");
+		String email = Input.read();
+		this.id = db.get_employee_id(email);
+	}
+
 }
 
 class Waitress implements Profile, Menu {
 
 	private SBD db;
-	private int[] orders = new int[0];
 	public final String PROFILE_NAME = "Waitress";
 	public final String GREETING = "Hi there!";
 	public final String[] MENU_OPTIONS = {
 		"View orders that are ready",
 		"Deliver an order"
 	};
+	private int id;
 
 	@Override
 	public String[] get_menu_options() { return this.MENU_OPTIONS; }
@@ -234,8 +346,9 @@ class Waitress implements Profile, Menu {
 	}
 
 	@Override
-	public void run() throws SQLException {
-		this.load_orders();
+	public void run() throws SQLException, User_not_found {
+		this.ask_who();
+		
 		int idx = -1;
 
 		while (true) {
@@ -250,43 +363,35 @@ class Waitress implements Profile, Menu {
 		}
 	}
 	
-	private void load_orders() throws SQLException {
-			
-		ResultSet rs = db.get_ready_orders();
-		rs.last();
-		this.orders = new int[rs.getRow() - 1];
-		rs.beforeFirst();
-		
-		for (int i = 0; i < this.orders.length && rs.next(); i++) {
-			this.orders[i] = rs.getInt("client_order_id");
-		}
-		
-		rs.close();
+	private void ask_who() throws SQLException, User_not_found {
+		Output.write("What's your email?");
+		String email = Input.read();
+		this.id = db.get_employee_id(email);
 	}
 
 	private void write_ready_orders() throws SQLException {
 		
-		this.load_orders();
+		String orders;
 		
-		if (this.orders.length > 0) {
-			Output.write(String.format("%-12s", "Orders ready"));
-			for (int i = 0; i < this.orders.length; i++) {
-				Output.write(String.format("%-12s", this.orders[i]));
-			}	
+		try {
+			java.sql.Date date = new java.sql.Date(new java.util.Date().getTime());
+			orders = db.get_orders(date, "Ready");
+			Output.write(orders);
+		} catch (SQL_invalid_results e) {
+			Output.write(e.getMessage());
 		}
-		else {
-			Output.write("There are no orders ready.");
-		}
-		
-		Output.write("\n");
 	}
 	
-	private void deliver_order() {
+	private void deliver_order() throws SQLException {
 		
 		Output.write("Which order?");
-		int order = Input.get_user_option(this.orders);
 		
-		System.out.println(this.orders[order]);
+		try {
+			String order = Input.read();
+			db.next_state(order, String.valueOf(this.id));
+		} catch (SQL_invalid_results e) {
+			Output.write(e.getMessage());
+		}
 	}
 
 }

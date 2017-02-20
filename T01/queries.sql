@@ -6,14 +6,32 @@ SET @param = '';
 CALL count_last_name("Almeida", @param);
 SELECT @param;
 
-CALL get_ready_orders('2017-01-30', 'Ready');
+CALL get_orders_by_state('2017-01-30', 'Ready');
+CALL get_order_details(1);
 
-USE sbd;
+
+SELECT client_order_id, order_state.title, employee_id, date FROM order_processing
+JOIN order_state ON MAX(order_processing.order_state_id) = order_state.id
+WHERE date = in_date
+GROUP BY client_order_id
+HAVING MAX(order_state_id) = (SELECT id FROM order_state WHERE title = in_order_state);
+
 
 SELECT name, price FROM Product JOIN Product_type ON Product.product_type_id = Product_type.id
 WHERE Product_type.title = 'Main dish';
 
 SELECT current_timestamp();
+
+-- Get orders by current state
+SELECT client_order_id, order_state.title, employee_id, date, time FROM order_processing
+JOIN order_state ON order_processing.order_state_id = order_state.id
+
+WHERE date = '2017-01-30'
+GROUP BY client_order_id
+
+HAVING MAX(order_processing.order_state_id) = (SELECT order_state.id FROM order_state WHERE order_state.title = 'Ready')
+ORDER BY client_order_id ASC;
+
 
 -- Ingredient in stock
 SELECT
@@ -64,22 +82,13 @@ GROUP BY client_order_product.product_id
 ORDER BY SUM(client_order_product.product_quantity) * product.price DESC
 LIMIT 3;
 
--- Product's average preparation time
-SELECT 
-    t1.client_order_id,
-    (t2.time - t1.time) / 100 AS 'Preperation time'
-FROM
-    order_processing AS t1
-        LEFT JOIN
-    order_processing AS t2 ON t1.client_order_id = t2.client_order_id
-        JOIN
-    client_order ON t1.client_order_id = client_order.id
-WHERE
-    t1.order_state_id = (SELECT order_state.id FROM order_state WHERE order_state.title = 'Accepted')
-        AND t2.order_state_id = (SELECT order_state.id FROM order_state WHERE order_state.title = 'Ready')
-        AND client_order.restaurant_id = 1
-        AND t1.date = CURDATE()
-ORDER BY client_order_id ASC;
+-- Product's average preparation timeTIME_TO_SEC(`login`)
+SELECT name, TIME(AVG(order_processing.time) - MIN(order_processing.time)) AS 'Average time' FROM product
+JOIN client_order_product ON product.id = client_order_product.product_id
+JOIN order_processing ON client_order_product.client_order_id = order_processing.client_order_id
+JOIN client_order ON client_order_product.client_order_id = client_order.id
+WHERE product.cook = TRUE AND client_order.restaurant_id = 1
+GROUP BY product.id;
 
 -- Clients that spent more money in a trimester
 SELECT 
@@ -102,7 +111,7 @@ WHERE
 GROUP BY client.id
 ORDER BY SUM(client_order_product.product_quantity * product.price) DESC;
 
--- Responsable employee for the preparation of an item
+-- Get order details
 SELECT 
     order_processing.client_order_id AS 'Order #',
     order_state.title AS 'Product state',
@@ -117,7 +126,7 @@ FROM
         JOIN
     client_order ON order_processing.client_order_id = client_order.id
 WHERE
-    client_order.restaurant_id = 1
+    order_processing.client_order_id = 1
 ORDER BY order_processing.client_order_id , order_processing.order_state_id ASC;
 
 -- Increment order state
@@ -132,5 +141,4 @@ VALUES
     
 SELECT * FROM order_processing;
 
-CALL order_next_state(29, 1);
     

@@ -9,7 +9,7 @@ CREATE TABLE `client` (
   `email` VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
   `mobile_number` VARCHAR(255) NOT NULL,
-  `tax_number` INTEGER NOT NULL,
+  `tax_number` BIGINT NOT NULL,
   `birth_date` DATE
 );
 
@@ -53,7 +53,8 @@ CREATE TABLE `product` (
   `brand` VARCHAR(255),
   `expiration_date` DATE NOT NULL,
   `price` DECIMAL(12, 2) NOT NULL,
-  `product_type_id` INTEGER NOT NULL
+  `product_type_id` INTEGER NOT NULL,
+  `cook` BOOLEAN NOT NULL
 );
 
 CREATE INDEX `idx_product__product_type_id` ON `product` (`product_type_id`);
@@ -63,7 +64,7 @@ ALTER TABLE `product` ADD CONSTRAINT `fk_product__product_type_id` FOREIGN KEY (
 CREATE TABLE `product_ingredient` (
   `product_id` INTEGER NOT NULL,
   `ingredient_id` INTEGER NOT NULL,
-  `quantity` VARCHAR(255) NOT NULL,
+  `quantity` INTEGER NOT NULL,
   PRIMARY KEY (`product_id`, `ingredient_id`)
 );
 
@@ -125,15 +126,15 @@ ALTER TABLE `client_order` ADD CONSTRAINT `fk_client_order__client_id` FOREIGN K
 ALTER TABLE `client_order` ADD CONSTRAINT `fk_client_order__restaurant_id` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurant` (`id`);
 
 CREATE TABLE `client_order_product` (
-  `order_id` INTEGER NOT NULL,
+  `client_order_id` INTEGER NOT NULL,
   `product_id` INTEGER NOT NULL,
   `product_quantity` INTEGER NOT NULL,
-  PRIMARY KEY (`order_id`, `product_id`)
+  PRIMARY KEY (`client_order_id`, `product_id`)
 );
 
 CREATE INDEX `idx_client_order_product__product_id` ON `client_order_product` (`product_id`);
 
-ALTER TABLE `client_order_product` ADD CONSTRAINT `fk_client_order_product__order_id` FOREIGN KEY (`order_id`) REFERENCES `client_order` (`id`);
+ALTER TABLE `client_order_product` ADD CONSTRAINT `fk_client_order_product__order_id` FOREIGN KEY (`client_order_id`) REFERENCES `client_order` (`id`);
 
 ALTER TABLE `client_order_product` ADD CONSTRAINT `fk_client_order_product__product_id` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`);
 
@@ -142,10 +143,11 @@ CREATE TABLE `employee` (
   `full_name` VARCHAR(255) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
   `mobile_number` VARCHAR(255) NOT NULL,
-  `tax_number` VARCHAR(255) NOT NULL,
+  `tax_number` BIGINT NOT NULL,
   `birth_date` VARCHAR(255) NOT NULL,
   `employee_type_id` INTEGER NOT NULL,
-  `restaurant_id` INTEGER NOT NULL
+  `restaurant_id` INTEGER NOT NULL,
+  `owner` BOOLEAN NOT NULL
 );
 
 CREATE INDEX `idx_employee__employee_type_id` ON `employee` (`employee_type_id`);
@@ -182,7 +184,7 @@ CREATE TABLE `order_processing` (
   `date` DATE NOT NULL,
   `time` TIME NOT NULL,
   `notes` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`client_order_id`, `order_state_id`, `employee_id`)
+  PRIMARY KEY (`client_order_id`, `order_state_id`)
 );
 
 CREATE INDEX `idx_order_processing__employee_id` ON `order_processing` (`employee_id`);
@@ -224,9 +226,9 @@ ALTER TABLE `stock_product` ADD CONSTRAINT `fk_stock_product__restaurant_id` FOR
 CREATE TABLE `supplier` (
   `id` INTEGER PRIMARY KEY AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
-  `tax_number` INTEGER NOT NULL,
+  `tax_number` BIGINT NOT NULL,
   `address` VARCHAR(255) NOT NULL,
-  `description` VARCHAR(255) NOT NULL
+  `description` VARCHAR(255)
 );
 
 CREATE TABLE `supplier_ingredient` (
